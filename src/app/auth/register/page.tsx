@@ -8,10 +8,12 @@ import React from "react";
 const RegisterPage = () => {
   return (
     <main className="flex h-screen w-full">
-      <section className="bg-gray-100 w-full flex  items-center overflow-auto">
-        <div className="w-[60%] mx-auto">
+      <section className="bg-gray-100 w-full flex items-center overflow-auto">
+        <div className="w-[60%] h-full mx-auto py-10">
           <p className="text-center mb-2">Hotel portal</p>
-          <h2 className="text-center text-2xl mb-5">Welcome to Login System</h2>
+          <h2 className="text-center text-2xl mb-5 text-blue-500 font-bold">
+            Welcome to Login System
+          </h2>
 
           <div className="flex justify-between items-center">
             <Link href="/auth" className="w-full">
@@ -75,6 +77,9 @@ const RegisterPage = () => {
               <p>Sign in wth Google</p>
             </div>
           </form>
+          <Button asChild variant="link" className="mt-5 flex justify-center">
+            <Link href="/">Back to Home</Link>
+          </Button>
         </div>
       </section>
       <section className="w-full bg-[url('/hero.jpg')] bg-cover relative">
