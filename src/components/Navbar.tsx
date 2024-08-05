@@ -51,11 +51,14 @@ const Navbar = () => {
         </ul>
 
         <div className="flex items-center space-x-3">
-          <Button variant="link" className="text-white">
-            {" "}
-            Sign up
-          </Button>
-          <Button className="bg-white text-blue-500">Sign in</Button>
+          <Link href="/auth/register">
+            <Button variant="link" className="text-white">
+              Sign up
+            </Button>
+          </Link>
+          <Link href="/auth">
+            <Button className="bg-white text-blue-500">Sign in</Button>
+          </Link>
         </div>
       </div>
     </div>

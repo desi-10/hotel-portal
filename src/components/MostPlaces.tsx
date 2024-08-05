@@ -3,6 +3,8 @@ import SectionHeader from "./Headers";
 import Wrapper from "./Wrapper";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import HotelCard from "./HotelCard";
+import { ArrowRight } from "lucide-react";
+import { Button } from "./ui/button";
 
 const MostPlaces = () => {
   const filterData = [
@@ -55,6 +57,14 @@ const MostPlaces = () => {
           {Array.from({ length: 5 }).map((_, i) => {
             return <HotelCard key={i} />;
           })}
+        </div>
+
+        <div className="flex justify-center mt-10">
+          <Button className="group w-40 text-xs relative overflow-hidden bg-blue-700 hover:bg-blue-800">
+            <span className="pr-3">View All Cities </span>
+            <ArrowRight className="w-4 h-4 group-hover:ml-4 transition-all duration-300" />
+            <span className="bg-transparent rounded-full w-16 h-16 group-hover:bg-gray-300/10 absolute -right-2 -top-3"></span>
+          </Button>
         </div>
       </Wrapper>
     </div>

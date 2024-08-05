@@ -1,4 +1,5 @@
 import {
+  ArrowRight,
   Check,
   House,
   Locate,
@@ -9,6 +10,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { Button } from "./ui/button";
 
 const HotelCard = () => {
   return (
@@ -54,7 +56,7 @@ const HotelCard = () => {
         </main>
         <footer className="flex items-center justify-between divide-x">
           <div className="flex items-center space-x-3 p-3">
-            <p className="bg-red-200 rounded-full p-2 text-white">
+            <p className="bg-blue-200 rounded-full p-2 text-white">
               <House />
             </p>
             <p>Hotel</p>
