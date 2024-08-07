@@ -20,23 +20,30 @@ import {
 } from "@/components/ui/breadcrumb";
 import { BsArrowUpRightSquare } from "react-icons/bs";
 import axios from "axios";
+import { HotelType } from "@/types/hostelTypes";
 
 const ListingPage = () => {
-  const [hotel, setHotel] = useState([]);
+  const [hotel, setHotel] = useState<HotelType[] | []>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchHotel = async () => {
+      setIsLoading(true);
       try {
         const { data } = await axios(
           "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
         );
         setHotel(data);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
     fetchHotel();
   }, []);
+
+  console.log(hotel);
 
   return (
     <main>
@@ -95,9 +102,17 @@ const ListingPage = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-10">
-              {hotel.map((_, i) => {
-                return <HotelCard key={i} />;
-              })}
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                hotel.map((hotel, i) => {
+                  return (
+                    <div key={i}>
+                      <HotelCard hotel={hotel} />
+                    </div>
+                  );
+                })
+              )}
             </div>
           </section>
         </div>

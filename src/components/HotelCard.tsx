@@ -5,14 +5,15 @@ import { RiHome5Line } from "react-icons/ri";
 import { PiHamburger } from "react-icons/pi";
 import Image from "next/image";
 import React from "react";
+import { HotelType } from "@/types/hostelTypes";
 
-const HotelCard = () => {
+const HotelCard = ({ hotel }: { hotel: HotelType }) => {
   return (
     <div className="border rounded-2xl overflow-hidden text-sm shadow-lg">
-      <div className="w-full h-">
+      <div className="w-full h-56">
         <Image
-          src="/hero.jpg"
-          alt="hotel"
+          src={hotel.image || ""}
+          alt={hotel.name}
           width={1000}
           height={1000}
           className="object-cover w-full h-full"
@@ -22,7 +23,7 @@ const HotelCard = () => {
         <header className="border-b py-3 px-5 space-y-2">
           <div className="flex items-center space-x-2">
             <p className="text-lg font-bold hover:text-blue-500">
-              Luxary Resaturant
+              {hotel.name}
             </p>
             <div className="bg-green-500 rounded-full p-2 text-white">
               <Check className="w-3 h-3" />
@@ -30,14 +31,11 @@ const HotelCard = () => {
           </div>
           <div className="flex items-center space-x-2 text-xs">
             <IoLocationOutline className="w-5 h-5 text-blue-500" />
-            <span>Location</span>
+            <span>{hotel.address}</span>
           </div>
         </header>
         <main className="py-3 px-5 border-b space-y-2">
-          <p className=" text-gray-500">
-            Sed interdum metus at nisi tempor laoreet. Integer gravida orci a
-            justo sodales.
-          </p>
+          <p className=" text-gray-500">{hotel.description}</p>
           <div className="flex items-center space-x-3">
             <p>Facilities</p>
             <ul className="flex items-center space-x-3">

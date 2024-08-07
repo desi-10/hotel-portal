@@ -5,8 +5,19 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import HotelCard from "./HotelCard";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { HotelType } from "@/types/hostelTypes";
 
-const MostPlaces = () => {
+const getHotel = async () => {
+  const response = await fetch(
+    "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
+  );
+  const data = await response.json();
+  return data;
+};
+
+const MostPlaces = async () => {
+  const hotels: HotelType[] = await getHotel();
+
   const filterData = [
     {
       id: 1,
@@ -54,8 +65,12 @@ const MostPlaces = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
-          {Array.from({ length: 5 }).map((_, i) => {
-            return <HotelCard key={i} />;
+          {hotels.map((hotel, i) => {
+            return (
+              <div key={i}>
+                <HotelCard hotel={hotel} />;
+              </div>
+            );
           })}
         </div>
 
