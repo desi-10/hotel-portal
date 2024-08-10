@@ -25,43 +25,46 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="sticky top-0  z-20 flex justify-between items-center  text-white container mx-auto p-3 bg-blue-950">
-      <div className="w-12">
-        <Image src="/logo.png" alt="logo" width={200} height={200} />
-      </div>
+    <nav className="sticky top-0 z-20 backdrop-blur-lg bg-primaryColor text-white">
+      <div className=" flex justify-between items-center container p-3 ">
+        <div className="font-extrabold text-primaryColor">
+          {/* <Image src="/logo.png" alt="logo" width={200} height={200} /> */}
+          Hotel and Event Portal
+        </div>
 
-      <ul className="flex items-center space-x-5">
-        {links.map((link) => (
-          <Link href={link.href} key={link.name}>
-            <Button variant="link" className="text-white">
-              {link.name}
-            </Button>
-          </Link>
-        ))}
-      </ul>
-
-      <div className="flex items-center space-x-10">
         <ul className="flex items-center space-x-5">
-          <li>
-            <Heart />
-          </li>
-          <li>
-            <ShoppingBag />
-          </li>
+          {links.map((link) => (
+            <Link href={link.href} key={link.name}>
+              <Button variant="link" className="text-white">
+                {link.name}
+              </Button>
+            </Link>
+          ))}
         </ul>
 
-        <div className="flex items-center space-x-3">
-          <Link href="/auth/register">
-            <Button variant="link" className="text-white">
-              Sign up
-            </Button>
-          </Link>
-          <Link href="/auth">
-            <Button className="bg-white text-blue-500">Sign in</Button>
-          </Link>
+        <div className="flex items-center space-x-10">
+          <ul className="flex items-center space-x-5">
+            <li>
+              <Heart />
+            </li>
+            <li>
+              <ShoppingBag />
+            </li>
+          </ul>
+
+          <div className="flex items-center space-x-3">
+            <Link href="/auth/register">
+              <Button variant="link" className="text-white">
+                Sign up
+              </Button>
+            </Link>
+            <Link href="/auth">
+              <Button className="bg-white text-blue-500">Sign in</Button>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
