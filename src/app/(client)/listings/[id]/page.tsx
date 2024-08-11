@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import {
   GalleryType,
   HotelType,
+  ReviewType,
   RoomType,
   WorkHoursType,
 } from "@/types/hostelTypes";
@@ -26,6 +27,16 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Rating from "@/components/Rating";
 import { Progress } from "@/components/ui/progress";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import SeeAllReviews from "@/components/SeeAllReviews";
 
 const SingleHotel = ({
   params,
@@ -37,7 +48,7 @@ const SingleHotel = ({
   const [hotel, setHotel] = useState<HotelType | null>(null);
   const [workhours, setWorkhours] = useState<WorkHoursType[] | null>(null);
   const [gallery, setGallery] = useState<GalleryType[] | null>(null); // Updated this to match the API response
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<ReviewType[]>([]);
   const [rooms, setRooms] = useState<RoomType[]>([]);
 
   const [progress, setProgress] = useState(60);
@@ -45,9 +56,23 @@ const SingleHotel = ({
   const fetchHotel = async () => {
     try {
       const { data } = await axios.get(
-        `https://hotelbookingcenter.pythonanywhere.com/api/hotels/${params.id}/`
+        `https://hotelbookingcenter.pythonanywhere.com/api/hotels/${searchParams.hotel__hotel_number}/`
       );
+      console.log(data);
       setHotel(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://hotelbookingcenter.pythonanywhere.com/api/reviews/?hotel__hotel_number=${searchParams.hotel__hotel_number}`
+      );
+      console.log(data);
+      setReviews(data);
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -72,18 +97,6 @@ const SingleHotel = ({
           `https://hotelbookingcenter.pythonanywhere.com/api/gallery/?hotel__hotel_number=${searchParams.hotel__hotel_number}`
         );
         setGallery(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const fetchReviews = async () => {
-      try {
-        const { data } = await axios.get(
-          `https://hotelbookingcenter.pythonanywhere.com/api/reviews/?hotel__hotel_number=${searchParams.hotel__hotel_number}`
-        );
-        setReviews(data);
-        console.log(data);
       } catch (error) {
         console.error(error);
       }
@@ -174,25 +187,43 @@ const SingleHotel = ({
   const [service, setService] = useState(0);
   const [price, setPrice] = useState(0);
   const [message, setMessage] = useState("");
+  const [isAddReviewLoading, setIsAddReviewLoading] = useState(false);
 
   const handleAddReview = async () => {
+    setIsAddReviewLoading(true);
     try {
       const { data } = await axios.post(
         "https://hotelbookingcenter.pythonanywhere.com/api/reviews/",
         {
           hotel: params.id,
-          quality: quality,
-          location: location,
-          service: service,
-          price: price,
+          quality_rating: quality,
+          location_rating: location,
+          service_rating: service,
+          price_rating: price,
           user: 1,
+          review: message,
         }
       );
       console.log(data);
+      setIsAddReviewLoading(false);
+      setMessage("");
+      setQuality(0);
+      setLocation(0);
+      setService(0);
+      setPrice(0);
+      fetchReviews();
     } catch (error) {
       console.error(error);
+      setIsAddReviewLoading(false);
     }
   };
+
+  const overallRating =
+    ((hotel?.avg_ratings?.average_price_rating || 0) +
+      (hotel?.avg_ratings?.average_location_rating || 0) +
+      (hotel?.avg_ratings?.average_quality_rating || 0) +
+      (hotel?.avg_ratings?.average_service_rating || 0)) /
+    4;
 
   return (
     <main>
@@ -321,22 +352,29 @@ const SingleHotel = ({
             <p className="p-5 border-b">Item Review</p>
             <div className="p-5 flex items-center space-x-10 bg-gray-200">
               <div className="flex flex-col space-y-1 justify-center">
-                <p className="text-3xl p-3 bg-primaryColor text-white rounded-lg w-fit">
-                  4.1
-                </p>
-                <Rating rating={4.1} />
+                <div className="text-3xl flex justify-center items-center w-20 h-16 bg-primaryColor text-white rounded-lg ">
+                  <p>{overallRating.toFixed(2)}</p>
+                </div>
+                <Rating rating={overallRating} />
               </div>
 
               <div className="flex space-x-5 w-full">
                 <div className="w-full space-y-3">
                   <div>
                     <Label>Quality</Label>
-                    <Progress value={progress} className="w-full" />
+                    <Progress
+                      value={
+                        (hotel?.avg_ratings?.average_quality_rating ?? 0) * 20
+                      }
+                      className="w-full"
+                    />
                   </div>
                   <div>
                     <Label>Location</Label>
                     <Progress
-                      value={progress}
+                      value={
+                        (hotel?.avg_ratings?.average_location_rating ?? 0) * 20
+                      }
                       className="w-full text-primaryColor"
                     />
                   </div>
@@ -345,42 +383,50 @@ const SingleHotel = ({
                 <div className="w-full space-y-3">
                   <div>
                     <Label>Price</Label>
-                    <Progress value={progress} className="w-full" />
+                    <Progress
+                      value={
+                        (hotel?.avg_ratings?.average_price_rating ?? 0) * 20
+                      }
+                      className="w-full"
+                    />
                   </div>
                   <div className="w-full">
                     <Label>Service</Label>
-                    <Progress value={progress} className="w-full" />
+                    <Progress
+                      value={
+                        (hotel?.avg_ratings?.average_service_rating ?? 0) * 20
+                      }
+                      className="w-full"
+                    />
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex justify-between items-center space-x-5 p-5">
-              <div className="w-28 rounded-full overflow-hidden">
-                <Image src={""} alt="avatar" width={100} height={100} />
-              </div>
-              <div className="bg-gray-200 w-full p-3 rounded-lg">
-                <div className="flex justify-between items-center">
-                  <p className="font-bold text-gray-500">Name</p>
-                  <div className="flex items-center space-x-3">
-                    <Rating rating={4.5} />
-                    <p className="p-3 rounded-lg text-white bg-primaryColor text-center">
-                      4.5
-                    </p>
-                  </div>
-                </div>
-                <p className="text-sm py-5 text-gray-500 border-b border-gray-300">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Tenetur totam itaque est deleniti aliquam, et accusamus
-                  nostrum sit sapiente nesciunt quaerat, recusandae eveniet
-                  praesentium enim blanditiis maiores at maxime nihil?
-                </p>
-                <div>
-                  <p className="text-sm py-3 text-gray-500">
-                    Posted 2 days ago
-                  </p>
-                </div>
-              </div>
+
+            <div className="p-5 space-y-5">
+              {reviews?.slice(0, 3).map((review) => (
+                <SeeAllReviews key={review.id} review={review} />
+              ))}
             </div>
+            <Dialog>
+              <DialogTrigger className="flex justify-end items-end p-3 w-full">
+                <Button variant="outline">See All Reviews</Button>
+              </DialogTrigger>
+              <DialogContent className="h-[90vh] max-h-full max-w[600px] overflow-auto">
+                <DialogHeader>
+                  <DialogTitle>Reviews</DialogTitle>
+                  <DialogDescription>
+                    See all reviews for this hotel
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                  {reviews?.map((review) => (
+                    <SeeAllReviews key={review.id} review={review} />
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
 
           <div className="border rounded-lg bg-white shadow-lg mt-5">
@@ -389,29 +435,47 @@ const SingleHotel = ({
             <div className="p-5 border-b bg-gray-200">
               <div className="flex items-center space-x-3">
                 <Label>Quality</Label>
-                <Input type="range" defaultValue={1} min={1} max={5} />
+                <Input
+                  type="range"
+                  value={quality}
+                  defaultValue={1}
+                  min={1}
+                  max={5}
+                  onChange={(event) => setQuality(parseInt(event.target.value))}
+                />
               </div>
               <div className="flex items-center space-x-3">
                 <Label>Location</Label>
-                <Input type="range" defaultValue={1} min={1} max={5} />
+                <Input
+                  value={location}
+                  type="range"
+                  defaultValue={1}
+                  min={1}
+                  max={5}
+                  onChange={(event) =>
+                    setLocation(parseInt(event.target.value))
+                  }
+                />
               </div>
 
               <div className="flex items-center space-x-3">
                 <Label>Price</Label>
                 <Input
                   type="range"
+                  value={price}
                   defaultValue={1}
                   min={1}
                   max={5}
-                  // onChange={}
+                  onChange={(event) => setPrice(parseInt(event.target.value))}
                 />
               </div>
 
               <div className="flex items-center space-x-3">
                 <Label>Service</Label>
-                <Input
+                <input
                   type="range"
                   className="w-full bg-primaryColor"
+                  value={service}
                   defaultValue={1}
                   min={1}
                   max={5}
@@ -422,17 +486,19 @@ const SingleHotel = ({
 
             <div className="p-5 space-y-3">
               <textarea
-                name=""
-                id=""
-                className="w-full p-5 border rounded-lg"
+                value={message}
+                className="w-full p-5 border rounded-lg text-black"
                 cols={30}
                 rows={10}
+                placeholder="Enter message"
+                onChange={(event) => setMessage(event.target.value)}
               ></textarea>
               <Button
                 onClick={handleAddReview}
+                disabled={isAddReviewLoading}
                 className="w-full bg-primaryColor"
               >
-                Add Review
+                {isAddReviewLoading ? "Loading" : "Add Review"}
               </Button>
             </div>
           </div>
@@ -450,7 +516,7 @@ const SingleHotel = ({
                       return (
                         <div
                           key={hour.day}
-                          className="flex items-center justify-between py-2"
+                          className="flex items-center justify-between py-2 text-sm"
                         >
                           <p>{hour.day}</p>
                           <p>{hour.period}</p>

@@ -1,80 +1,102 @@
 import { z } from "zod";
 
-// Define the Owner schema
-const ownerSchema = z.object({
+// Define the User schema (similar to Owner, but renamed for clarity)
+const userSchema = z.object({
   id: z.number(),
-  first_name: z.string(),
-  last_name: z.string(),
-  joined_since: z.string(),
-  bio: z.string(),
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  joined_since: z.string(), // ISO date-time string
+  bio: z.string().optional(),
   phone_number: z.string(),
   profile_picture: z.string().nullable(),
   role: z.string(),
 });
 
-// Define the Facilities schema
-const facilitiesSchema = z.object({
+// Define the Review schema
+const reviewSchema = z.object({
   id: z.number(),
+  user: userSchema,
+  review: z.string(),
+  price_rating: z.number(),
+  service_rating: z.number(),
+  quality_rating: z.number(),
+  location_rating: z.number(),
+  created_at: z.string(), // ISO date-time string
+  updated_at: z.string(), // ISO date-time string
+  hotel: z.number(),
+});
+
+// Define the rest of your schemas (as you already have)
+const ownerSchema = z.object({
+  id: z.number(),
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  joined_since: z.string(),
+  bio: z.string().optional(),
+  phone_number: z.string(),
+  profile_picture: z.string().nullable(),
+  role: z.string(),
+});
+
+const facilitiesSchema = z.object({
   has_wifi: z.boolean(),
   has_swimming_pool: z.boolean(),
   has_conference_room: z.boolean(),
   has_tennis_court: z.boolean(),
   has_breakfast_in_bed: z.boolean(),
-  created_at: z.string(), // ISO date-time string
-  updated_at: z.string(), // ISO date-time string
-  hotel: z.number(),
 });
 
-// Define the WorkHour schema
+const avgRatingsSchema = z.object({
+  average_price_rating: z.number(),
+  average_location_rating: z.number(),
+  average_quality_rating: z.number(),
+  average_service_rating: z.number(),
+});
+
 const workHourSchema = z.object({
-  day: z.string(), // Example: "Sunday"
-  period: z.string(), // Example: "8:00am - 6:00pm"
+  day: z.string(),
+  period: z.string(),
 });
 
-// Define the WorkHours schema
 const workHoursSchema = z.object({
   id: z.number(),
   workhours: z.array(workHourSchema),
-  created_at: z.string(), // ISO date-time string
-  updated_at: z.string(), // ISO date-time string
+  created_at: z.string(),
+  updated_at: z.string(),
   hotel: z.number(),
 });
 
-// Define the Gallery schema
 const gallerySchema = z.object({
   id: z.number(),
-  image: z.string(), // URI for the image
-  created_at: z.string(), // ISO date-time string
-  updated_at: z.string(), // ISO date-time string
+  image: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
   hotel: z.number(),
 });
 
-// Define the Booking schema
 const bookingSchema = z.object({
   id: z.number(),
   booking_number: z.string(),
-  checkin: z.string(), // ISO date-time string
-  checkout: z.string(), // ISO date-time string
-  created_at: z.string(), // ISO date-time string
+  checkin: z.string(),
+  checkout: z.string(),
+  created_at: z.string(),
   status: z.string(),
   total_cost: z.number(),
 });
 
-// Define the Room schema
 const roomSchema = z.object({
   id: z.number(),
   has_booking: z.boolean(),
   booking_list: z.array(bookingSchema),
   room_number: z.string(),
   room_type: z.string(),
-  image: z.string(), // URI for the image
+  image: z.string(),
   description: z.string(),
   price_per_night: z.string(),
   is_available: z.boolean(),
   hotel: z.number(),
 });
 
-// Define the Hotel schema
 const hotelSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -89,16 +111,21 @@ const hotelSchema = z.object({
   owner: ownerSchema,
   region: z.string(),
   updated_at: z.string(),
-  website: z.string(),
+  website: z.string().optional(),
   facilities: facilitiesSchema.optional(),
+  avg_ratings: avgRatingsSchema.optional(),
   workhours: workHoursSchema.optional(),
   gallery: z.array(gallerySchema).optional(),
   rooms: z.array(roomSchema).optional(),
+  reviews: z.array(reviewSchema).optional(), // Adding reviews to hotel schema
 });
 
 // Define TypeScript types
+export type UserType = z.infer<typeof userSchema>;
+export type ReviewType = z.infer<typeof reviewSchema>;
 export type OwnerType = z.infer<typeof ownerSchema>;
 export type FacilitiesType = z.infer<typeof facilitiesSchema>;
+export type AvgRatingsType = z.infer<typeof avgRatingsSchema>;
 export type WorkHourType = z.infer<typeof workHourSchema>;
 export type WorkHoursType = z.infer<typeof workHoursSchema>;
 export type GalleryType = z.infer<typeof gallerySchema>;
