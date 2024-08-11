@@ -37,6 +37,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import SeeAllReviews from "@/components/SeeAllReviews";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const SingleHotel = ({
   params,
@@ -142,6 +151,7 @@ const SingleHotel = ({
 
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
+  const [roomId, setRoomId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -160,7 +170,7 @@ const SingleHotel = ({
           checkin: checkin,
           checkout: checkout,
           user: 1,
-          room: params.id,
+          room: roomId,
         }
       );
 
@@ -172,6 +182,7 @@ const SingleHotel = ({
 
       setCheckin("");
       setCheckout("");
+      setRoomId(0);
       setIsLoading(false);
       fetchHotel();
     } catch (error) {
@@ -548,12 +559,34 @@ const SingleHotel = ({
                 />
               </div>
             </div>
+            <div>
+              <Select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a room" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Room</SelectLabel>
+                    {rooms.map((room) => (
+                      <SelectItem
+                        key={room.id}
+                        value={room.id.toString()}
+                        onChange={() => setRoomId(room.id)}
+                      >
+                        {room.room_number}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
             <form onSubmit={handleSubmit}>
               <Button
                 type="submit"
+                disabled={isLoading}
                 className="bg-primaryColor text-white px-5 py-1 flex space-x-3 w-full"
               >
-                <p>Book Now</p>
+                <p>{isLoading ? "Loading" : "Book Now"}</p>
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </form>
