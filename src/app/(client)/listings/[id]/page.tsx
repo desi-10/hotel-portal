@@ -620,8 +620,10 @@ const SingleHotel = ({
                 </div>
               </div>
               <div className="p-5 w-40 h-20 flex flex-col justify-center items-center bg-white rounded-lg">
-                <p className="text-3xl font-bold text-primaryColor">4.5</p>
-                <Rating rating={4} />
+                <p className="text-3xl font-bold text-primaryColor">
+                  {((price + service + quality + location) / 4).toFixed(2)}
+                </p>
+                <Rating rating={(price + service + quality + location) / 4} />
               </div>
             </div>
 
