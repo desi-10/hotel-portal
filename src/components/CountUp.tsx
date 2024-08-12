@@ -30,7 +30,7 @@ const CountUp = () => {
     },
   ];
   return (
-    <main className="bg-[url('/celebrate.jpg')] bg-cover bg-fixed relative">
+    <main className="bg-[url('/celebrate.jpg')] bg-cover bg-fixed relative h-full overflow-hidden">
       <Wrapper>
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 text-white py-10">
           {countUpData.map((item) => (

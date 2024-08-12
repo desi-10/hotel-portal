@@ -4,7 +4,7 @@ import { MdOutlineLocalHotel } from "react-icons/md";
 
 const HeroSection = () => {
   return (
-    <main className="relative w-full h-screen flex justify-center items-center bg-[url('/hero.jpg')] bg-cover bg-fixed">
+    <main className="relative w-full h-screen flex justify-center items-center bg-[url('/hero.jpg')] bg-cover bg-fixed overflow-hidden">
       <div className="relative z-10 text-white px-8">
         <div>
           <h1 className="text-5xl font-bold text-white mb-5">

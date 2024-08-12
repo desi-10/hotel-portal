@@ -1,13 +1,22 @@
 import React from "react";
 import { Heart, Star, Unlock } from "lucide-react";
 import Image from "next/image";
+import { HotelType } from "@/types/hostelTypes";
+import Rating from "./Rating";
 
-const LatestListing = () => {
+const LatestListing = ({ hotel }: { hotel: HotelType }) => {
+  const overallRating =
+    ((hotel?.avg_ratings?.average_price_rating || 0) +
+      (hotel?.avg_ratings?.average_location_rating || 0) +
+      (hotel?.avg_ratings?.average_quality_rating || 0) +
+      (hotel?.avg_ratings?.average_service_rating || 0)) /
+    4;
+
   return (
     <section className="text-xs text-white  h-72 w-[450px] p-5 rounded-lg overflow-hidden relative group">
       <Image
-        src="/room1.jpg"
-        alt="image"
+        src={hotel.image || "/room1.jpg"}
+        alt={hotel.name || "hotel image"}
         width={1000}
         height={1000}
         className="absolute inset-0 group-hover:scale-110 transition-all duration-700"
@@ -28,17 +37,17 @@ const LatestListing = () => {
         <div>
           <div className="flex justify-between items-center border-b pb-3 border-opacity-30 border-gray-300">
             <div>
-              <p>Hostel name</p>
-              <p>Location</p>
+              <p>{hotel.name}</p>
+              <p>{hotel.region}</p>
             </div>
 
             <div className="flex items-center space-x-3">
-              <p className="p-3 bg-blue-700 rounded-lg w-fit text-white">4.5</p>
+              <p className="p-3 bg-blue-700 rounded-lg w-fit text-white">
+                {overallRating.toFixed(2)}
+              </p>
               <div>
                 <div className="flex items-center space-x-1 mb-1">
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Star className="text-yellow-500 w-3 h-3" key={i} />
-                  ))}
+                  <Rating rating={overallRating} />
                 </div>
                 <p>3reviews</p>
               </div>

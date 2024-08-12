@@ -25,7 +25,7 @@ const SectionHeader = ({
         </h3>
       </div>
       <div className="relative mt-2 mb-4">
-        <div className="w-12 h-1 bg-blue-500 mx-auto"></div>
+        <div className="w-12 h-1 bg-primaryColor mx-auto"></div>
       </div>
 
       <p className=" text-gray-500 text-center w-[500px] mx-auto">

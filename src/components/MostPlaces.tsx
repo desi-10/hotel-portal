@@ -55,7 +55,7 @@ const MostPlaces = async () => {
               <li
                 key={item.id}
                 className={`${
-                  item.id === 1 && "bg-blue-500 text-white"
+                  item.id === 1 && "bg-primaryColor text-white"
                 } text-gray-500`}
               >
                 {item.name}
