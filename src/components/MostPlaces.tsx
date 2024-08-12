@@ -9,7 +9,10 @@ import { HotelType } from "@/types/hostelTypes";
 
 const getHotel = async () => {
   const response = await fetch(
-    "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
+    "https://hotelbookingcenter.pythonanywhere.com/api/hotels/",
+    {
+      cache: "no-store",
+    }
   );
   const data = await response.json();
   return data;
@@ -17,6 +20,7 @@ const getHotel = async () => {
 
 const MostPlaces = async () => {
   const hotels: HotelType[] = await getHotel();
+  console.log(hotels);
 
   const filterData = [
     {

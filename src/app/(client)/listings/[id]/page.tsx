@@ -269,7 +269,7 @@ const SingleHotel = ({
 
                 <div className="flex justify-between items-center w-full h-96 rounded-lg bg-black overflow-hidden">
                   <Image
-                    src={selectedRoom?.image || "/room1.jpg"}
+                    src={selectedRoom?.image || ""}
                     width={600}
                     height={600}
                     alt="logo"
@@ -381,11 +381,14 @@ const SingleHotel = ({
           <div className="border rounded-lg bg-white mb-5 shadow-lg">
             <p className="p-5 border-b font-bold">Description</p>
             <p className="p-5">{hotel?.description}</p>
-            {hotel?.website && (
-              <Link href={hotel.website} className="p-5">
-                <Button>Website</Button>
-              </Link>
-            )}
+
+            <div className="p-5">
+              {hotel?.website && (
+                <Link href={hotel.website} className="p-5">
+                  <Button>Website</Button>
+                </Link>
+              )}
+            </div>
           </div>
 
           <div className="border rounded-lg bg-white mb-5 shadow-lg">
@@ -393,17 +396,17 @@ const SingleHotel = ({
             <ul className="p-5">
               {hotel?.facilities && (
                 <div className="flex space-x-3 items-center">
-                  {hotel.facilities.has_wifi && <li>Has WiFi</li>}
+                  {hotel?.facilities.has_wifi && <li>Has WiFi</li>}
                   {hotel.facilities.has_swimming_pool && (
                     <li>Has Swimming Pool</li>
                   )}
-                  {hotel.facilities.has_conference_room && (
+                  {hotel?.facilities.has_conference_room && (
                     <li>Has Conference Room</li>
                   )}
-                  {hotel.facilities.has_tennis_court && (
+                  {hotel?.facilities.has_tennis_court && (
                     <li>Has Tennis Court</li>
                   )}
-                  {hotel.facilities.has_breakfast_in_bed && (
+                  {hotel?.facilities.has_breakfast_in_bed && (
                     <li>Has Breakfast in Bed</li>
                   )}
                 </div>
@@ -417,7 +420,7 @@ const SingleHotel = ({
               <p className="p-5">No rooms available</p>
             ) : (
               <ul className="grid grid-cols-3">
-                {rooms.slice(0, 3).map((room) => (
+                {rooms?.slice(0, 3).map((room) => (
                   <li
                     key={room.id}
                     onClick={() => handleRooms(room.id)}
@@ -425,14 +428,14 @@ const SingleHotel = ({
                   >
                     <div className="w-[200px] h-24 rounded-lg overflow-hidden">
                       <Image
-                        src={room.image}
-                        alt={room.room_number}
+                        src={room?.image || ""}
+                        alt={room?.room_number || "Room Image"}
                         width={600}
                         height={600}
                         className="object-cover w-full h-full"
                       />
                     </div>
-                    <p className="text-lg text-center">{room.room_number}</p>
+                    <p className="text-lg text-center">{room?.room_number}</p>
                   </li>
                 ))}
               </ul>
@@ -468,8 +471,8 @@ const SingleHotel = ({
                       className="h-44 overflow-hidden mx-3 rounded-lg flex-shrink-0"
                     >
                       <Image
-                        src={image.image}
-                        alt={image.image}
+                        src={image.image || ""}
+                        alt={image.image || "Hotel Image"}
                         width={500}
                         height={500}
                         className="object-cover w-full h-full"
@@ -481,7 +484,7 @@ const SingleHotel = ({
             </div>
           </div>
 
-          <div className="border rounded-lg bg-white shadow-lg mt-5">
+          <div className="border rounded-lg bg-white shadow-lg mb-5">
             <p className="p-5 border-b font-bold">Item Review</p>
             <div className="p-5 flex items-center space-x-10 bg-gray-200">
               <div className="flex flex-col space-y-1 justify-center">
@@ -536,7 +539,7 @@ const SingleHotel = ({
               </div>
             </div>
 
-            <div className="p-5 space-y-5">
+            <div className="p-5 space-y-5 ">
               {reviews?.slice(0, 3).map((review) => (
                 <SeeAllReviews key={review.id} review={review} />
               ))}
@@ -562,7 +565,7 @@ const SingleHotel = ({
             </Dialog>
           </div>
 
-          <div className="border rounded-lg bg-white shadow-lg mt-5">
+          <div className="border rounded-lg bg-white shadow-lg my-5">
             <p className="p-5 border-b font-bold">Add Review</p>
 
             <div className="flex items-center bg-gray-200 p-5 space-x-5">

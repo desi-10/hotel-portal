@@ -13,7 +13,7 @@ const HotelCard = ({ hotel }: { hotel: HotelType }) => {
     <Link
       href={`/listings/${hotel.id}/?hotel__hotel_number=${hotel.hotel_number}`}
     >
-      <div className="border rounded-2xl overflow-hidden text-sm shadow-lg">
+      <div className="border rounded-2xl overflow-hidden text-sm shadow-lg ">
         <div className="w-full h-56">
           <Image
             src={hotel.image || ""}
@@ -23,7 +23,7 @@ const HotelCard = ({ hotel }: { hotel: HotelType }) => {
             className="object-cover w-full h-full"
           />
         </div>
-        <div className="rounded-t-3xl bg-white -mt-4 relative z-10">
+        <div className="rounded-t-3xl bg-white -mt-4 relative z-10 flex flex-col justify-between h-[240px]">
           <header className="border-b py-3 px-5 space-y-2">
             <div className="flex items-center space-x-2">
               <p className="text-lg font-bold hover:text-blue-500">
@@ -39,7 +39,7 @@ const HotelCard = ({ hotel }: { hotel: HotelType }) => {
             </div>
           </header>
           <main className="py-3 px-5 border-b space-y-2">
-            <p className=" text-gray-500">{hotel.description}</p>
+            <p className=" text-gray-500 line-clamp-2">{hotel.description}</p>
             <div className="flex items-center space-x-3">
               <p>Facilities</p>
               <ul className="flex items-center space-x-3">
