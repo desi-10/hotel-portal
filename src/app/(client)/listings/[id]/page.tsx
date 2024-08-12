@@ -382,7 +382,7 @@ const SingleHotel = ({
             <p className="p-5 border-b font-bold">Description</p>
             <p className="p-5">{hotel?.description}</p>
 
-            <div className="p-5">
+            <div className="py-3">
               {hotel?.website && (
                 <Link href={hotel.website} className="p-5">
                   <Button>Website</Button>
@@ -484,7 +484,7 @@ const SingleHotel = ({
             </div>
           </div>
 
-          <div className="border rounded-lg bg-white shadow-lg mb-5">
+          <div className="border rounded-lg bg-white shadow-lg mt-5">
             <p className="p-5 border-b font-bold">Item Review</p>
             <div className="p-5 flex items-center space-x-10 bg-gray-200">
               <div className="flex flex-col space-y-1 justify-center">

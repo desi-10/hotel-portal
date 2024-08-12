@@ -7,6 +7,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { HotelType } from "@/types/hostelTypes";
 import axios from "axios";
+import Link from "next/link";
 
 function Listings() {
   const [hotels, setHotels] = useState<HotelType[] | []>([]);
@@ -71,7 +72,11 @@ function Listings() {
             {hotels.map((hotel, i) => {
               return (
                 <div key={hotel.id} className="">
-                  <LatestListing hotel={hotel} />
+                  <Link
+                    href={`/listings/${hotel.id}/?hotel__hotel_number=${hotel.hotel_number}`}
+                  >
+                    <LatestListing hotel={hotel} />
+                  </Link>
                 </div>
               );
             })}
