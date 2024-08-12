@@ -6,6 +6,7 @@ import HotelCard from "./HotelCard";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
 import { HotelType } from "@/types/hostelTypes";
+import Link from "next/link";
 
 const getHotel = async () => {
   const response = await fetch(
@@ -78,13 +79,15 @@ const MostPlaces = async () => {
           })}
         </div>
 
-        <div className="flex justify-center mt-10 bg-gray-300 w-fit mx-auto rounded-lg p-1.5">
-          <Button className="group w-70 relative overflow-hidden bg-primaryColor text-lg p-5">
-            <span className="pr-3">View All Hotels</span>
-            <ArrowRight className="w-4 h-4 group-hover:ml-4 transition-all duration-300" />
-            <span className="bg-transparent rounded-full w-16 h-16 group-hover:bg-gray-300/10 absolute -right-2 -top-3"></span>
-          </Button>
-        </div>
+        <Link href="/listings">
+          <div className="flex justify-center mt-10 bg-gray-300 w-fit mx-auto rounded-lg p-1.5">
+            <Button className="group w-70 relative overflow-hidden bg-primaryColor text-lg p-5">
+              <span className="pr-3">View All Hotels</span>
+              <ArrowRight className="w-4 h-4 group-hover:ml-4 transition-all duration-300" />
+              <span className="bg-transparent rounded-full w-16 h-16 group-hover:bg-gray-300/10 absolute -right-2 -top-3"></span>
+            </Button>
+          </div>
+        </Link>
       </Wrapper>
     </div>
   );
