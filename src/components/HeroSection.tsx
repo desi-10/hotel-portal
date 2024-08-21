@@ -4,36 +4,42 @@ import { MdOutlineLocalHotel } from "react-icons/md";
 
 const HeroSection = () => {
   return (
-    <main className="relative w-full h-screen flex justify-center items-center bg-[url('/hero.jpg')] bg-cover bg-fixed overflow-hidden">
-      <div className="relative z-10 text-white px-8">
-        <div>
-          <h1 className="text-5xl font-bold text-white mb-5">
-            Explore Best Places In City
+    <main className="relative w-full h-screen flex justify-center items-center bg-[url('/33.jpg')] bg-center bg-cover bg-fixed overflow-hidden">
+      <div className="relative z-10 text-white px-4 md:px-8">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-5">
+            Discover Top Attractions in Your City
           </h1>
-          <p className="text-sm font-bold text-center mb-10">
-            Find some of the best tips from around the city from our partners
-            and friends.
+          <p className="text-sm md:text-lg font-bold text-center mb-10">
+            Explore the best spots around town curated by locals and experts.
           </p>
         </div>
 
-        <div className="border w-full p-8 rounded-lg mb-5"></div>
+        <div className="flex flex-col md:flex-row overflow-hidden w-full rounded-lg mb-5 shadow-lg">
+          <input
+            type="text"
+            placeholder="Search for places, events, and more"
+            className="w-full outline-none p-4 text-black"
+          />
+          <button className="p-4 bg-primaryColor text-white">Search</button>
+        </div>
 
-        <p className="text-sm mb-3 text-center">
-          Just looking around ? Use quick search by category :
+        <p className="text-sm md:text-base mb-3 text-center">
+          Just browsing? Use quick search by category:
         </p>
 
-        <div className="flex items-center justify-center space-x-8">
+        <div className="flex flex-wrap items-center justify-center space-x-8">
           <div className="flex flex-col justify-center items-center hover:cursor-pointer hover:text-blue-500 hover:underline">
-            <Pizza className="w-7 h-7 text-2xl" />
-            <p>Restaurant</p>
+            <Pizza className="w-7 h-7 md:w-10 md:h-10" />
+            <p>Restaurants</p>
           </div>
           <div className="flex flex-col justify-center items-center hover:cursor-pointer hover:text-blue-500 hover:underline">
-            <MdOutlineLocalHotel className="w-7 h-7 text-2xl" />
+            <MdOutlineLocalHotel className="w-7 h-7 md:w-10 md:h-10" />
             <p>Hotels</p>
           </div>
         </div>
       </div>
-      <div className="absolute top-0 left-0 w-full h-full bg-slate-600/40"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-black/70"></div>
     </main>
   );
 };

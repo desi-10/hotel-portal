@@ -1,20 +1,26 @@
-import { Check, Locate, Pizza, Wifi } from "lucide-react";
-import { AiOutlineZoomIn } from "react-icons/ai";
+import { Check, Wifi } from "lucide-react";
+import { AiOutlineExpandAlt } from "react-icons/ai";
 import { IoLocationOutline, IoMailOutline } from "react-icons/io5";
 import { RiHome5Line } from "react-icons/ri";
-import { PiHamburger } from "react-icons/pi";
+import {
+  MdFreeBreakfast,
+  MdOutlineFastfood,
+  MdOutlineMeetingRoom,
+  MdOutlineSportsTennis,
+} from "react-icons/md";
 import Image from "next/image";
 import React from "react";
 import { HotelType } from "@/types/hostelTypes";
 import Link from "next/link";
+import { FaSwimmingPool } from "react-icons/fa";
 
 const HotelCard = ({ hotel }: { hotel: HotelType }) => {
   return (
     <Link
       href={`/listings/${hotel.id}/?hotel__hotel_number=${hotel.hotel_number}`}
     >
-      <div className="border rounded-2xl overflow-hidden text-sm shadow-lg ">
-        <div className="w-full h-56">
+      <div className="border rounded-2xl overflow-hidden text-sm shadow-lg transition-transform duration-300 hover:scale-105">
+        <div className="w-full h-56 sm:h-48 lg:h-56">
           <Image
             src={hotel.image || ""}
             alt={hotel.name}
@@ -39,16 +45,35 @@ const HotelCard = ({ hotel }: { hotel: HotelType }) => {
             </div>
           </header>
           <main className="py-3 px-5 border-b space-y-2">
-            <p className=" text-gray-500 line-clamp-2">{hotel.description}</p>
+            <p className="text-gray-500 line-clamp-2">{hotel.description}</p>
             <div className="flex items-center space-x-3">
-              <p>Facilities</p>
+              <p>Facilities:</p>
               <ul className="flex items-center space-x-3">
-                <li>
-                  <Wifi className="w-4 h-4" />
-                </li>
-                <li>
-                  <PiHamburger className="w-4 h-4" />
-                </li>
+                {hotel.facilities?.has_wifi && (
+                  <li>
+                    <Wifi className="w-4 h-4" />
+                  </li>
+                )}
+                {hotel.facilities?.has_breakfast_in_bed && (
+                  <li>
+                    <MdOutlineFastfood className="w-4 h-4" />
+                  </li>
+                )}
+                {hotel.facilities?.has_conference_room && (
+                  <li>
+                    <MdOutlineMeetingRoom className="w-4 h-4" />
+                  </li>
+                )}
+                {hotel.facilities?.has_swimming_pool && (
+                  <li>
+                    <FaSwimmingPool className="w-4 h-4" />
+                  </li>
+                )}
+                {hotel.facilities?.has_tennis_court && (
+                  <li>
+                    <MdOutlineSportsTennis className="w-4 h-4" />
+                  </li>
+                )}
               </ul>
             </div>
           </main>
@@ -57,12 +82,12 @@ const HotelCard = ({ hotel }: { hotel: HotelType }) => {
               <p className="bg-blue-200 rounded-full p-2 text-white">
                 <RiHome5Line className="w-5 h-5" />
               </p>
-              <p>Hotel</p>
+              <p>{hotel.name}</p>
             </div>
             <div className="flex items-center space-x-2 p-3">
               <IoMailOutline className="w-5 h-5" />
               <IoLocationOutline className="w-5 h-5" />
-              <AiOutlineZoomIn className="w-5 h-5" />
+              <AiOutlineExpandAlt className="w-5 h-5" />
             </div>
           </footer>
         </div>

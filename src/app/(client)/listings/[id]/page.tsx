@@ -18,7 +18,7 @@ import {
   WorkHoursType,
 } from "@/types/hostelTypes";
 import axios from "axios";
-import { ArrowLeft, ArrowRight, Heart, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, Wifi, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -48,6 +48,12 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
+import {
+  MdOutlineFastfood,
+  MdOutlineMeetingRoom,
+  MdOutlineSportsTennis,
+} from "react-icons/md";
+import { FaSwimmingPool } from "react-icons/fa";
 
 const SingleHotel = ({
   params,
@@ -322,7 +328,7 @@ const SingleHotel = ({
           </div>
         </section>
       )}
-      <div className="relative h-96 bg-[url('/single.jpg')] bg-cover">
+      <div className="relative h-96 bg-[url('/22.jpg')] bg-fixed bg-center bg-cover">
         <div className="absolute inset-0 bg-black/75"></div>
       </div>
       <section className="container bg-white border-b sticky top-16 z-20">
@@ -396,18 +402,30 @@ const SingleHotel = ({
             <ul className="p-5">
               {hotel?.facilities && (
                 <div className="flex space-x-3 items-center">
-                  {hotel?.facilities.has_wifi && <li>Has WiFi</li>}
-                  {hotel.facilities.has_swimming_pool && (
-                    <li>Has Swimming Pool</li>
+                  {hotel.facilities?.has_wifi && (
+                    <li>
+                      <Wifi className="w-4 h-4" />
+                    </li>
                   )}
-                  {hotel?.facilities.has_conference_room && (
-                    <li>Has Conference Room</li>
+                  {hotel.facilities?.has_breakfast_in_bed && (
+                    <li>
+                      <MdOutlineFastfood className="w-4 h-4" />
+                    </li>
                   )}
-                  {hotel?.facilities.has_tennis_court && (
-                    <li>Has Tennis Court</li>
+                  {hotel.facilities?.has_conference_room && (
+                    <li>
+                      <MdOutlineMeetingRoom className="w-4 h-4" />
+                    </li>
                   )}
-                  {hotel?.facilities.has_breakfast_in_bed && (
-                    <li>Has Breakfast in Bed</li>
+                  {hotel.facilities?.has_swimming_pool && (
+                    <li>
+                      <FaSwimmingPool className="w-4 h-4" />
+                    </li>
+                  )}
+                  {hotel.facilities?.has_tennis_court && (
+                    <li>
+                      <MdOutlineSportsTennis className="w-4 h-4" />
+                    </li>
                   )}
                 </div>
               )}

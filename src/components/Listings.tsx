@@ -54,7 +54,7 @@ function Listings() {
         description="Lorem ipsum dolor sit amet consectetur adipisicing elit."
       />
 
-      <div className="relative mt-10 border ">
+      <div className="relative mt-10">
         <div
           className="flex justify-center items-center absolute bg-primaryColor text-white border h-10 w-10 z-10  rounded-r-full left-0 top-1/2 -translate-y-1/2  group-hover/name:opacity-100 transition-all duration-300 cursor-pointer"
           onClick={scrollPrev}

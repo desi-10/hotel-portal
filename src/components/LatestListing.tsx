@@ -3,6 +3,7 @@ import { Heart, Star, Unlock } from "lucide-react";
 import Image from "next/image";
 import { HotelType } from "@/types/hostelTypes";
 import Rating from "./Rating";
+import { RiHome5Line } from "react-icons/ri";
 
 const LatestListing = ({ hotel }: { hotel: HotelType }) => {
   const overallRating =
@@ -13,7 +14,7 @@ const LatestListing = ({ hotel }: { hotel: HotelType }) => {
     4;
 
   return (
-    <section className="text-xs text-white  h-72 w-[450px] p-5 rounded-lg overflow-hidden relative group">
+    <section className="text-xs text-white shadow-lg h-72 w-[450px] p-5 rounded-lg overflow-hidden relative group">
       <Image
         src={hotel.image || "/room1.jpg"}
         alt={hotel.name || "hotel image"}
@@ -28,14 +29,14 @@ const LatestListing = ({ hotel }: { hotel: HotelType }) => {
             <p className="hidden group-hover:block">Save</p>
           </div>
 
-          <div className="flex items-center space-x-3 bg-green-400 px-3 py-1 rounded-full">
+          {/* <div className="flex items-center space-x-3 bg-green-400 px-3 py-1 rounded-full">
             <Unlock className="w-4 h-4" />
             <p>Available</p>
-          </div>
+          </div> */}
         </div>
 
         <div>
-          <div className="flex justify-between items-center border-b pb-3 border-opacity-30 border-gray-300">
+          <div className="flex justify-between font-bold items-center border-b pb-3 border-opacity-30 border-gray-300">
             <div>
               <p>{hotel.name}</p>
               <p>{hotel.region}</p>
@@ -49,17 +50,16 @@ const LatestListing = ({ hotel }: { hotel: HotelType }) => {
                 <div className="flex items-center space-x-1 mb-1">
                   <Rating rating={overallRating} />
                 </div>
-                <p>3reviews</p>
               </div>
             </div>
           </div>
 
           <div className="pt-3">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-3 bg-white w-fit px-3 py-2 rounded-full text-black">
               <p>
-                <Heart />
+                <RiHome5Line className="w-5 h-5" />
               </p>
-              Hostel
+              <p className="font-bold">Hostel</p>
             </div>
           </div>
         </div>

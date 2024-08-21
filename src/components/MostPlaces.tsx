@@ -1,27 +1,24 @@
 import React from "react";
 import SectionHeader from "./Headers";
 import Wrapper from "./Wrapper";
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
-import HotelCard from "./HotelCard";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
 import { HotelType } from "@/types/hostelTypes";
 import Link from "next/link";
+import HotelCard from "./HotelCard";
+import axios from "axios";
 
 const getHotel = async () => {
-  const response = await fetch(
-    "https://hotelbookingcenter.pythonanywhere.com/api/hotels/",
-    {
-      cache: "no-store",
-    }
+  const { data } = await axios(
+    "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
   );
-  const data = await response.json();
+
+  console.log(data);
   return data;
 };
 
 const MostPlaces = async () => {
   const hotels: HotelType[] = await getHotel();
-  console.log(hotels);
 
   const filterData = [
     {
@@ -30,24 +27,17 @@ const MostPlaces = async () => {
     },
     {
       id: 2,
-      name: "Restaurant",
-    },
-    {
-      id: 3,
       name: "Hotel",
     },
     {
-      id: 4,
-      name: "Event",
-    },
-    {
-      id: 5,
-      name: "Attraction",
+      id: 3,
+      name: "Event center",
     },
   ];
+
   return (
     <div>
-      <Wrapper>
+      <div className="px-5 lg:container">
         <SectionHeader
           mainText="Most Visited Places"
           subText="Best Listings"
@@ -69,11 +59,11 @@ const MostPlaces = async () => {
           </ul>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
           {hotels.map((hotel, i) => {
             return (
               <div key={i}>
-                <HotelCard hotel={hotel} />;
+                <HotelCard hotel={hotel} />
               </div>
             );
           })}
@@ -81,14 +71,14 @@ const MostPlaces = async () => {
 
         <Link href="/listings">
           <div className="flex justify-center mt-10 bg-gray-300 w-fit mx-auto rounded-lg p-1.5">
-            <Button className="group w-70 relative overflow-hidden bg-primaryColor text-lg p-5">
+            <Button className="group w-full sm:w-auto relative overflow-hidden bg-primaryColor text-lg p-5">
               <span className="pr-3">View All Hotels</span>
               <ArrowRight className="w-4 h-4 group-hover:ml-4 transition-all duration-300" />
               <span className="bg-transparent rounded-full w-16 h-16 group-hover:bg-gray-300/10 absolute -right-2 -top-3"></span>
             </Button>
           </div>
         </Link>
-      </Wrapper>
+      </div>
     </div>
   );
 };

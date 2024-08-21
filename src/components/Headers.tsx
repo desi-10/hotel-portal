@@ -12,15 +12,15 @@ const SectionHeader = ({
   description,
 }: SectionHeaderType) => {
   return (
-    <main>
-      <div className="relative text-center p-5">
-        <div className="text-6xl font-extrabold text-gray-500 absolute inset-0 flex items-center justify-center opacity-10 uppercase">
+    <main className="text-center p-5">
+      <div className="relative">
+        <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-500 absolute inset-0 flex items-center justify-center opacity-10 uppercase">
           <div className="relative">
             <h2 className="">{subText}</h2>
             <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
           </div>
         </div>
-        <h3 className="relative text-3xl font-bold text-gray-700 capitalize">
+        <h3 className="relative text-xl sm:text-2xl lg:text-3xl font-bold text-gray-700 capitalize">
           {mainText}
         </h3>
       </div>
@@ -28,7 +28,7 @@ const SectionHeader = ({
         <div className="w-12 h-1 bg-primaryColor mx-auto"></div>
       </div>
 
-      <p className=" text-gray-500 text-center w-[500px] mx-auto">
+      <p className="text-gray-500 text-center mx-auto max-w-xs sm:max-w-md lg:max-w-lg">
         {description}
       </p>
     </main>

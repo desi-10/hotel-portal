@@ -1,7 +1,9 @@
+"use client";
 import React from "react";
 import Wrapper from "./Wrapper";
+import CountUp from "react-countup";
 
-const CountUp = () => {
+const CountUpComponent = () => {
   const countUpData = [
     {
       id: 1,
@@ -38,16 +40,23 @@ const CountUp = () => {
               key={item.id}
               className="flex flex-col items-center justify-center"
             >
-              <h1 className="text-5xl font-bold mb-2">{item.count}</h1>
+              <h1 className="text-5xl font-bold mb-2">
+                <CountUp
+                  enableScrollSpy
+                  scrollSpyOnce={true}
+                  end={item.count}
+                  duration={3}
+                />
+              </h1>
               <p className="text-sm font-bold mb-3">{item.title}</p>
-              <div className="w-10 h-1 bg-blue-500"></div>
+              <div className="w-10 h-1 bg-primaryColor"></div>
             </div>
           ))}
         </div>
       </Wrapper>
-      <div className="absolute inset-0 bg-black/50"></div>
+      <div className="absolute inset-0 bg-black/75"></div>
     </main>
   );
 };
 
-export default CountUp;
+export default CountUpComponent;

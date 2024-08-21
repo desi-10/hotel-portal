@@ -21,6 +21,9 @@ import {
 import { BsArrowUpRightSquare } from "react-icons/bs";
 import axios from "axios";
 import { HotelType } from "@/types/hostelTypes";
+import ClipLoader from "react-spinners/ClipLoader";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const ListingPage = () => {
   const [hotel, setHotel] = useState<HotelType[] | []>([]);
@@ -43,11 +46,43 @@ const ListingPage = () => {
     fetchHotel();
   }, []);
 
-  console.log(hotel);
+  const [searchParams, setSearchParams] = useState("");
+  const [cities, setCities] = useState("");
+
+  const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    try {
+      const { data } = await axios(
+        `https://hotelbookingcenter.pythonanywhere.com/api/hotels/?search=${searchParams}&city=${cities}`
+      );
+      console.log(data);
+      setHotel(data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
+  const getUniqueCities = (hotels: HotelType[]): string[] => {
+    // Extract cities from hotels and include empty string if present
+    const cities = hotels.map((hotel) => hotel.city);
+
+    // Use a Set to get unique values
+    const uniqueCities = Array.from(new Set(cities));
+
+    return uniqueCities;
+  };
+
+  const handleClear = () => {
+    setSearchParams("");
+    setCities("");
+  };
 
   return (
     <main>
-      <div className="relative h-96 bg-[url('/listing.jpg')] bg-cover">
+      <div className="relative h-96 bg-[url('/33.jpg')] bg-fixed bg-center bg-cover">
         <div className="absolute inset-0 bg-black/75"></div>
       </div>
       <section className="container">
@@ -60,11 +95,7 @@ const ListingPage = () => {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+                  <BreadcrumbLink href="/listings">Listings</BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -72,11 +103,53 @@ const ListingPage = () => {
           <BsArrowUpRightSquare className="w-6 h-6 text-blue-500" />
         </div>
         <div className="flex space-x-20 relative py-10">
-          <section className="w-[600px] sticky top-20 bg-black h-96 rounded-lg"></section>
+          <section className="w-[600px] sticky top-20 bg-white h-fit rounded-lg space-y-3 shadow-lg overflow-hidden">
+            <h4 className="bg-primaryColor p-4 text-white">Filter by</h4>
+
+            <form
+              onSubmit={handleSearch}
+              className="flex flex-col space-y-5 p-4"
+            >
+              <Input
+                value={searchParams}
+                onChange={(event) => setSearchParams(event.target.value)}
+                type="text"
+                placeholder="What are you looking for?"
+              />
+
+              <Select onValueChange={setCities}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Cities" />
+                </SelectTrigger>
+                <SelectContent>
+                  {getUniqueCities(hotel).map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <div className="flex items-center space-x-5">
+                <Button type="submit" className="w-full bg-primaryColor">
+                  Search
+                </Button>
+                <Button
+                  onClick={handleClear}
+                  type="reset"
+                  variant={"ghost"}
+                  className="w-full"
+                >
+                  Clear
+                </Button>
+              </div>
+            </form>
+          </section>
           <section className="w-full">
             <div className="bg-white py-3 px-5 flex space-x-3 justify-between items-center rounded-lg mb-5 border">
               <p className="font-bold text-gray-500">
-                Results For : <span className=" text-blue-500">New York</span>
+                Results For :{" "}
+                <span className=" text-primaryColor">All Hotels</span>
               </p>
               <div className="flex items-center space-x-5">
                 <div className="flex items-center space-x-3">
@@ -85,12 +158,12 @@ const ListingPage = () => {
                   </div>
                   <Select>
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Theme" />
+                      <SelectValue placeholder="----" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
+                      <SelectItem value="light">Popular</SelectItem>
+                      <SelectItem value="dark">New</SelectItem>
+                      <SelectItem value="system">Relevance</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -101,19 +174,26 @@ const ListingPage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-10">
-              {isLoading ? (
-                <p>Loading...</p>
-              ) : (
-                hotel.map((hotel, i) => {
+            {isLoading ? (
+              <div className="flex justify-center mt-10 w-full">
+                <ClipLoader
+                  color="#000000"
+                  size={50}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-10">
+                {hotel.map((hotel, i) => {
                   return (
                     <div key={i}>
                       <HotelCard hotel={hotel} />
                     </div>
                   );
-                })
-              )}
-            </div>
+                })}
+              </div>
+            )}
           </section>
         </div>
       </section>

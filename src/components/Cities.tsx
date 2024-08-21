@@ -44,15 +44,15 @@ const Cities = () => {
         <SectionHeader
           mainText="Explore Best Cities"
           subText="Catalog of Categories"
-          description="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          description="Discover the most popular cities around the world."
         />
 
-        <div className="grid grid-cols-3 grid-rows-2 gap-5 mt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-2 gap-5 mt-10">
           {cities.map((city, i) => {
             return (
               <div
                 key={i}
-                className="h-72 bg-black last:col-span-2 rounded-lg shadow-md overflow-hidden relative"
+                className="h-72 bg-black lg:last:col-span-2 rounded-lg shadow-md overflow-hidden relative"
               >
                 <Image
                   src={city.image}
