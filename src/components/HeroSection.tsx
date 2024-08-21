@@ -1,8 +1,12 @@
+"use client";
 import { Pizza } from "lucide-react";
-import React from "react";
+import Link from "next/link";
+import React, { useState } from "react";
 import { MdOutlineLocalHotel } from "react-icons/md";
 
 const HeroSection = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
     <main className="relative w-full h-screen flex justify-center items-center bg-[url('/33.jpg')] bg-center bg-cover bg-fixed overflow-hidden">
       <div className="relative z-10 text-white px-4 md:px-8">
@@ -18,10 +22,14 @@ const HeroSection = () => {
         <div className="flex flex-col md:flex-row overflow-hidden w-full rounded-lg mb-5 shadow-lg">
           <input
             type="text"
-            placeholder="Search for places, events, and more"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder="Search for hotels, events centers, and more"
             className="w-full outline-none p-4 text-black"
           />
-          <button className="p-4 bg-primaryColor text-white">Search</button>
+          <Link href={`/listings?query=${searchTerm}`}>
+            <button className="p-4 bg-primaryColor text-white">Search</button>
+          </Link>
         </div>
 
         <p className="text-sm md:text-base mb-3 text-center">

@@ -25,7 +25,13 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const ListingPage = () => {
+const ListingPage = ({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { query: string };
+}) => {
   const [hotel, setHotel] = useState<HotelType[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,6 +39,15 @@ const ListingPage = () => {
     const fetchHotel = async () => {
       setIsLoading(true);
       try {
+        if (searchParams.query) {
+          const { data } = await axios(
+            `https://hotelbookingcenter.pythonanywhere.com/api/hotels/?search=${searchParams.query}`
+          );
+          setHotel(data);
+          setIsLoading(false);
+          return;
+        }
+
         const { data } = await axios(
           "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
         );
@@ -46,7 +61,7 @@ const ListingPage = () => {
     fetchHotel();
   }, []);
 
-  const [searchParams, setSearchParams] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [cities, setCities] = useState("");
 
   const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -54,7 +69,7 @@ const ListingPage = () => {
     setIsLoading(true);
     try {
       const { data } = await axios(
-        `https://hotelbookingcenter.pythonanywhere.com/api/hotels/?search=${searchParams}&city=${cities}`
+        `https://hotelbookingcenter.pythonanywhere.com/api/hotels/?search=${searchTerm}&city=${cities}`
       );
       console.log(data);
       setHotel(data);
@@ -76,7 +91,7 @@ const ListingPage = () => {
   };
 
   const handleClear = () => {
-    setSearchParams("");
+    setSearchTerm("");
     setCities("");
   };
 
@@ -111,8 +126,8 @@ const ListingPage = () => {
               className="flex flex-col space-y-5 p-4"
             >
               <Input
-                value={searchParams}
-                onChange={(event) => setSearchParams(event.target.value)}
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
                 type="text"
                 placeholder="What are you looking for?"
               />
@@ -147,10 +162,13 @@ const ListingPage = () => {
           </section>
           <section className="w-full">
             <div className="bg-white py-3 px-5 flex space-x-3 justify-between items-center rounded-lg mb-5 border">
-              <p className="font-bold text-gray-500">
+              <div className="font-bold text-gray-500 flex items-center space-x-5">
                 Results For :{" "}
-                <span className=" text-primaryColor">All Hotels</span>
-              </p>
+                <div className=" text-primaryColor flex items-center space-x-2 ml-2 capitalize">
+                  <p>{searchParams.query || "All Hotels"}</p>
+                  <p className="text-sm">[{hotel.length}]</p>
+                </div>
+              </div>
               <div className="flex items-center space-x-5">
                 <div className="flex items-center space-x-3">
                   <div className="text-gray-500 text-sm font-bold">
