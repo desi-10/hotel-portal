@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import SectionHeader from "./Headers";
 import Wrapper from "./Wrapper";
 import { ArrowRight } from "lucide-react";
@@ -8,17 +9,20 @@ import Link from "next/link";
 import HotelCard from "./HotelCard";
 import axios from "axios";
 
-const getHotel = async () => {
-  const { data } = await axios(
-    "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
-  );
+const MostPlaces = () => {
+  const [hotels, setHotels] = React.useState<HotelType[]>([]);
+  const [selectedNumber, setSelectedNumber] = React.useState(1);
 
-  console.log(data);
-  return data;
-};
+  useEffect(() => {
+    const getHotel = async () => {
+      const { data } = await axios(
+        "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
+      );
+      setHotels(data);
+    };
 
-const MostPlaces = async () => {
-  const hotels: HotelType[] = await getHotel();
+    getHotel();
+  }, []);
 
   const filterData = [
     {
@@ -41,16 +45,17 @@ const MostPlaces = async () => {
         <SectionHeader
           mainText="Most Visited Places"
           subText="Best Listings"
-          description="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          description="Discover the best places to stay and explore."
         />
 
         <div className="flex justify-center mt-10 border-2 overflow-hidden w-fit mx-auto rounded-lg text-xs font-bold">
           <ul className="flex items-center bg-gray-100 [&>li]:cursor-pointer [&>li]:px-5 [&>li]:p-3 divide-x">
             {filterData.map((item) => (
               <li
+                onClick={() => setSelectedNumber(item.id)}
                 key={item.id}
                 className={`${
-                  item.id === 1 && "bg-primaryColor text-white"
+                  item.id === selectedNumber && "bg-primaryColor text-white"
                 } text-gray-500`}
               >
                 {item.name}

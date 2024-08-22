@@ -35,6 +35,7 @@ const RegisterPage = () => {
         setIsLoading(false);
         setOpenOTP(false);
         console.log(data);
+        router.push("/auth/");
       } else {
         const { data } = await axios.post(
           "https://hotelbookingcenter.pythonanywhere.com/api/token/register/",
