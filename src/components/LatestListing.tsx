@@ -59,7 +59,7 @@ const LatestListing = ({ hotel }: { hotel: HotelType }) => {
               <p>
                 <RiHome5Line className="w-5 h-5" />
               </p>
-              <p className="font-bold">Hostel</p>
+              <p className="font-bold">Hotel</p>
             </div>
           </div>
         </div>

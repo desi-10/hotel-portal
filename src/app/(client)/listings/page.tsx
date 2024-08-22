@@ -30,7 +30,7 @@ const ListingPage = ({
   searchParams,
 }: {
   params: { id: string };
-  searchParams: { query: string };
+  searchParams: { query: string; city: string };
 }) => {
   const [hotel, setHotel] = useState<HotelType[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +42,15 @@ const ListingPage = ({
         if (searchParams.query) {
           const { data } = await axios(
             `https://hotelbookingcenter.pythonanywhere.com/api/hotels/?search=${searchParams.query}`
+          );
+          setHotel(data);
+          setIsLoading(false);
+          return;
+        }
+
+        if (searchParams.city) {
+          const { data } = await axios(
+            `https://hotelbookingcenter.pythonanywhere.com/api/hotels/?city=${searchParams.city}`
           );
           setHotel(data);
           setIsLoading(false);
