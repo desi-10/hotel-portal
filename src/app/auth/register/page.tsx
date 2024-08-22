@@ -24,25 +24,25 @@ const RegisterPage = () => {
     try {
       if (openOTP) {
         const { data } = await axios.post(
-          "https://hotelbookingcenter.pythonanywhere.com/api/token/verify-otp/",
+          "https://hotelbookingcenter.pythonanywhere.com/api/token/register/",
           {
-            phone_number: phonenumber,
+            username: username,
             otp: OTPValue,
+            phone_number: phonenumber,
           }
         );
         console.log(data);
         setIsLoading(false);
         setOpenOTP(false);
-        router.push("/auth/");
+        console.log(data);
       } else {
         const { data } = await axios.post(
-          "https://hotelbookingcenter.pythonanywhere.com/api/token/generate-otp/",
+          "https://hotelbookingcenter.pythonanywhere.com/api/token/register/",
           {
             phone_number: phonenumber,
           }
         );
         console.log(data);
-
         setOpenOTP(true);
         setIsLoading(false);
       }

@@ -39,7 +39,7 @@ const HeroSection = () => {
         <div className="flex flex-wrap items-center justify-center space-x-8">
           <div className="flex flex-col justify-center items-center hover:cursor-pointer hover:text-blue-500 hover:underline">
             <Pizza className="w-7 h-7 md:w-10 md:h-10" />
-            <p>Restaurants</p>
+            <p>Event centers</p>
           </div>
           <div className="flex flex-col justify-center items-center hover:cursor-pointer hover:text-blue-500 hover:underline">
             <MdOutlineLocalHotel className="w-7 h-7 md:w-10 md:h-10" />
