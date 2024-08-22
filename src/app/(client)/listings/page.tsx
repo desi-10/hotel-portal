@@ -106,9 +106,19 @@ const ListingPage = ({
 
   return (
     <main>
-      <div className="relative h-96 bg-[url('/33.jpg')] bg-fixed bg-center bg-cover">
+      <div className="relative h-96 bg-[url('/33.jpg')] bg-fixed bg-center bg-cover flex justify-center items-center">
         <div className="absolute inset-0 bg-black/75"></div>
+        <div className="relative z-10 text-center text-white px-4 py-6 max-w-md">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Explore Our Listings
+          </h1>
+          <p className="text-lg md:text-xl">
+            Browse through a variety of options and find exactly what youre
+            looking for.
+          </p>
+        </div>
       </div>
+
       <section className="container">
         <div className="bg-white border-b border-x p-7 rounded-b-lg flex justify-between items-center">
           <div className="">
@@ -178,7 +188,7 @@ const ListingPage = ({
                   <p className="text-sm">[{hotel.length}]</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-5">
+              {/* <div className="flex items-center space-x-5">
                 <div className="flex items-center space-x-3">
                   <div className="text-gray-500 text-sm font-bold">
                     Sort by:
@@ -198,7 +208,7 @@ const ListingPage = ({
                   <MdOutlineGridOn className="w-5 h-5" />
                   <FaListUl className="w-5 h-5" />
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {isLoading ? (

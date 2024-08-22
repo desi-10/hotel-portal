@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Heart, ShoppingBag, Menu } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "./Session";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { user } = useAuth();
 
   const links = [
     {
@@ -32,7 +35,7 @@ const Navbar = () => {
       <div className="container flex justify-between items-center p-3">
         <div className="font-extrabold text-primaryColor">
           {/* <Image src="/logo.png" alt="logo" width={200} height={200} /> */}
-          Hotel and Event Portal
+          Hotel and Event Center Portal
         </div>
 
         <div className="hidden lg:flex items-center space-x-5">
@@ -46,22 +49,28 @@ const Navbar = () => {
         </div>
 
         <div className="hidden lg:flex items-center space-x-10">
-          <ul className="flex items-center space-x-5">
+          {/* <ul className="flex items-center space-x-5">
             <li>
               <Heart />
             </li>
-          </ul>
+          </ul> */}
 
-          <div className="flex items-center space-x-3">
-            <Link href="/auth/register">
-              <Button variant="link" className="text-primaryColor">
-                Sign up
-              </Button>
-            </Link>
-            <Link href="/auth">
-              <Button className="bg-primaryColor text-white">Sign in</Button>
-            </Link>
-          </div>
+          {user ? (
+            <div className=" truncate w-20 border px-3 py-1 rounded-lg">
+              {user?.refresh}
+            </div>
+          ) : (
+            <div className="flex items-center space-x-3">
+              <Link href="/auth/register">
+                <Button variant="link" className="text-primaryColor">
+                  Sign up
+                </Button>
+              </Link>
+              <Link href="/auth">
+                <Button className="bg-primaryColor text-white">Sign in</Button>
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="lg:hidden flex items-center">
@@ -83,24 +92,30 @@ const Navbar = () => {
               </Button>
             </Link>
           ))}
-          <ul className="flex space-x-5">
+          {/* <ul className="flex space-x-5">
             <li>
               <Heart />
             </li>
             <li>
               <ShoppingBag />
             </li>
-          </ul>
-          <div className="flex flex-col items-center space-y-3">
-            <Link href="/auth/register">
-              <Button variant="link" className="text-primaryColor">
-                Sign up
-              </Button>
-            </Link>
-            <Link href="/auth">
-              <Button className="bg-primaryColor text-white">Sign in</Button>
-            </Link>
-          </div>
+          </ul> */}
+          {user ? (
+            <div className="truncate w-20 border px-3 py-1 rounded-lg">
+              {user?.refresh}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center space-y-3">
+              <Link href="/auth/register">
+                <Button variant="link" className="text-primaryColor">
+                  Sign up
+                </Button>
+              </Link>
+              <Link href="/auth">
+                <Button className="bg-primaryColor text-white">Sign in</Button>
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </nav>

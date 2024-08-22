@@ -1,6 +1,5 @@
 "use client";
 import InputOTPWithSeparator from "@/components/OTP";
-import InputOTPPattern from "@/components/OTP";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,65 +15,60 @@ const LoginPage = () => {
   const [phonenumber, setPhonenumber] = useState("");
   const [openOTP, setOpenOTP] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
+    setError(null); // Reset error state before making a request
+
     try {
       if (openOTP) {
         const { data } = await axios.post(
           "https://hotelbookingcenter.pythonanywhere.com/api/token/verify-otp/",
-          {
-            phone_number: phonenumber,
-            otp: OTPValue,
-          }
+          { phone_number: phonenumber, otp: OTPValue }
         );
-        console.log(data);
         setIsLoading(false);
         setOpenOTP(false);
         router.push("/");
+        localStorage.setItem("user", JSON.stringify(data));
       } else {
         const { data } = await axios.post(
           "https://hotelbookingcenter.pythonanywhere.com/api/token/generate-otp/",
-          {
-            phone_number: phonenumber,
-          }
+          { phone_number: phonenumber }
         );
-        console.log(data);
-
-        setOpenOTP(true);
         setIsLoading(false);
+        setOpenOTP(true);
       }
     } catch (error) {
       setIsLoading(false);
+      setError("Failed to authenticate. Please try again.");
       console.error(error);
     }
   };
 
   return (
     <main className="flex flex-col md:flex-row h-screen w-full">
-      <section className="bg-gray-100 flex-1 flex justify-center items-center overflow-auto p-4">
+      <section className="bg-gray-100 flex-1 flex justify-center items-center p-4">
         <div className="w-full max-w-md mx-auto">
-          <p className="text-center mb-2 text-sm md:text-base">Hotel portal</p>
-          <h2 className="text-center text-xl md:text-2xl mb-5 text-blue-500 font-bold">
-            Welcome to Login System
+          <p className="text-center mb-2 text-sm md:text-base text-gray-700">
+            Hotel Portal
+          </p>
+          <h2 className="text-center text-xl md:text-2xl mb-5 text-blue-600 font-bold">
+            Welcome to the Login System
           </h2>
 
           <div className="flex justify-between items-center mb-5">
-            <p className="border-b-4  border-b-primaryColor w-full flex items-center py-2 text-center">
-              <span>
-                <PersonStanding className="w-4 h-4 mx-2" />
-              </span>
+            <p className="border-b-4 border-b-blue-600 w-full flex items-center py-2 text-center text-gray-800">
+              <PersonStanding className="w-4 h-4 mx-2" />
               Login
             </p>
             <Link
               href="/auth/register"
-              className="border-b-2 flex items-center w-full py-2 text-center mt-2 md:mt-0"
+              className="border-b-2 border-gray-300 flex items-center py-2 text-center text-blue-600"
             >
-              <span>
-                <Mail className="w-4 h-4 mx-2" />
-              </span>
+              <Mail className="w-4 h-4 mx-2" />
               Register
             </Link>
           </div>
@@ -83,7 +77,7 @@ const LoginPage = () => {
             <div>
               <Label
                 htmlFor="phonenumber"
-                className="block text-sm md:text-base"
+                className="block text-sm md:text-base text-gray-700"
               >
                 Phone Number
               </Label>
@@ -107,6 +101,8 @@ const LoginPage = () => {
               </div>
             )}
 
+            {error && <p className="text-red-500 text-center">{error}</p>}
+
             <Button className="w-full">
               <div className="flex justify-center items-center">
                 {isLoading ? (
@@ -114,7 +110,6 @@ const LoginPage = () => {
                     color="#ffffff"
                     size={20}
                     aria-label="Loading Spinner"
-                    data-testid="loader"
                   />
                 ) : (
                   <p>{!openOTP ? "Get OTP" : "Login"}</p>
@@ -124,7 +119,9 @@ const LoginPage = () => {
           </form>
 
           <Button asChild variant="link" className="mt-5 flex justify-center">
-            <Link href="/">Back to Home</Link>
+            <Link href="/" className="text-blue-600 hover:underline">
+              Back to Home
+            </Link>
           </Button>
         </div>
       </section>
