@@ -19,7 +19,9 @@ export async function POST(request: NextRequest) {
             currency: "GHC",
             product_data: {
               name: room?.room_number || "No room number",
-              images: [room?.image] || undefined,
+              images: [room?.image] || [
+                "https://www.pexels.com/photo/photo-of-living-room-1457842/",
+              ],
             },
             unit_amount: parseFloat(room?.price_per_night) * 100 || 0,
           },
