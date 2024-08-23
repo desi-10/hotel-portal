@@ -8,6 +8,8 @@ import { Mail, PersonStanding } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { FiLogIn } from "react-icons/fi";
+import { IoIosPersonAdd } from "react-icons/io";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const RegisterPage = () => {
@@ -68,7 +70,7 @@ const RegisterPage = () => {
               className="border-b-4  w-full flex items-center py-2 text-center"
             >
               <span>
-                <PersonStanding className="w-4 h-4 mx-2" />
+                <FiLogIn className="w-4 h-4 mx-2" />
               </span>
               Login
             </Link>
@@ -77,7 +79,7 @@ const RegisterPage = () => {
               className="border-b-4 border-b-primaryColor flex items-center w-full py-2 text-center mt-2 md:mt-0"
             >
               <span>
-                <Mail className="w-4 h-4 mx-2" />
+                <IoIosPersonAdd className="w-4 h-4 mx-2" />
               </span>
               Register
             </Link>

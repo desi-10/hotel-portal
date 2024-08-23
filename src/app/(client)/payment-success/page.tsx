@@ -1,18 +1,68 @@
-export default function PaymentSuccess({
-  searchParams: { amount },
-}: {
-  searchParams: { amount: string };
-}) {
-  return (
-    <main className="max-w-6xl mx-auto p-10 text-white text-center border m-10 rounded-md bg-gradient-to-tr from-blue-500 to-purple-500">
-      <div className="mb-10">
-        <h1 className="text-4xl font-extrabold mb-2">Thank you!</h1>
-        <h2 className="text-2xl">You successfully sent</h2>
+"use client";
 
-        <div className="bg-white p-2 rounded-md text-purple-500 mt-5 text-4xl font-bold">
-          ${amount}
-        </div>
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import ConfettiExplosion from "react-confetti-explosion";
+
+const BookingConfirmationPage = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [countdown, setCountdown] = useState<number>(5);
+  const router = useRouter();
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    let redirectTimer: NodeJS.Timeout;
+
+    // Start countdown and redirect after a few seconds
+    timer = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    redirectTimer = setTimeout(() => {
+      router.push("/");
+    }, 5000);
+
+    setIsLoading(false);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(redirectTimer);
+    };
+  }, [router]);
+
+  return (
+    <div className="flex flex-col justify-center items-center h-screen">
+      <div className="fixed inset-0 flex justify-center items-center w-full h-screen pointer-events-none">
+        <ConfettiExplosion
+          particleCount={399}
+          width={2000}
+          duration={3000}
+          force={1.5}
+        />
       </div>
-    </main>
+      <section className="space-y-3 text-center">
+        <div>
+          <div className="w-[200px] mx-auto">
+            <Image
+              src="/conf.png"
+              alt="confetti"
+              className="w-full"
+              width={400}
+              height={400}
+            />
+          </div>
+          <p className="text-lg font-bold">Thank you for booking with us!</p>
+          <p className="text-green-500 bg-green-100 p-3 mt-3 rounded-lg">
+            Your booking was successful.
+          </p>
+          <p className="text-lg">
+            Redirecting to the home page in {countdown} seconds...
+          </p>
+        </div>
+      </section>
+    </div>
   );
-}
+};
+
+export default BookingConfirmationPage;

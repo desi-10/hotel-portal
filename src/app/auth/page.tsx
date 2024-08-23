@@ -10,6 +10,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { IoIosPersonAdd } from "react-icons/io";
+import { FiLogIn } from "react-icons/fi";
 
 const LoginPage = () => {
   const [OTPValue, setOTPValue] = useState("");
@@ -69,15 +71,15 @@ const LoginPage = () => {
           </h2>
 
           <div className="flex justify-between items-center mb-5">
-            <p className="border-b-4 border-b-blue-600 w-full flex items-center py-2 text-center text-gray-800">
-              <PersonStanding className="w-4 h-4 mx-2" />
+            <p className="border-b-4 border-b-primaryColor w-full flex items-center py-2 text-center text-gray-800">
+              <FiLogIn className="w-4 h-4 mx-2" />
               Login
             </p>
             <Link
               href="/auth/register"
-              className="border-b-2 border-gray-300 flex items-center py-2 text-center text-blue-600"
+              className="border-b-2 border-gray-300 w-full flex items-center py-2 text-center "
             >
-              <Mail className="w-4 h-4 mx-2" />
+              <IoIosPersonAdd className="w-4 h-4 mx-2" />
               Register
             </Link>
           </div>
