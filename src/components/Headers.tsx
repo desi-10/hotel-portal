@@ -3,14 +3,9 @@ import React from "react";
 type SectionHeaderType = {
   mainText: string;
   subText: string;
-  description: string;
 };
 
-const SectionHeader = ({
-  mainText,
-  subText,
-  description,
-}: SectionHeaderType) => {
+const SectionHeader = ({ mainText, subText }: SectionHeaderType) => {
   return (
     <main className="text-center p-5">
       <div className="relative">
@@ -27,10 +22,6 @@ const SectionHeader = ({
       <div className="relative mt-2 mb-4">
         <div className="w-12 h-1 bg-primaryColor mx-auto"></div>
       </div>
-
-      <p className="text-gray-500 text-center mx-auto max-w-xs sm:max-w-md lg:max-w-lg">
-        {description}
-      </p>
     </main>
   );
 };

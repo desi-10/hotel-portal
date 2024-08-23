@@ -28,12 +28,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
           );
 
-          const user = response.data; // Adjust based on the shape of your API response
+          const user = {
+            ...response.data,
+            name: credentials.phonenumber,
+            id: credentials.phonenumber,
+          }; // Adjust based on the shape of your API response
 
           console.log(user);
 
           // Check if the user object contains the required properties
-          if (user && user.id) {
+          if (user && user.name) {
+            console.log("user", user);
             return user; // Return user object if authentication is successful
           } else {
             throw new Error("Invalid OTP or phone number");

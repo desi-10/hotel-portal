@@ -84,11 +84,7 @@ const MostPlaces = () => {
   return (
     <div>
       <div className="px-5 lg:container">
-        <SectionHeader
-          mainText="Most Visited Places"
-          subText="Best Listings"
-          description="Discover the best places to stay and explore."
-        />
+        <SectionHeader mainText="Most Visited Places" subText="Best Listings" />
 
         <div className="flex justify-center mt-10 border-2 overflow-hidden w-fit mx-auto rounded-lg text-xs font-bold">
           <ul className="flex items-center bg-gray-100 [&>li]:cursor-pointer [&>li]:px-5 [&>li]:p-3 divide-x">

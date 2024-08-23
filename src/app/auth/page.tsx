@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { Mail, PersonStanding } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -25,14 +26,22 @@ const LoginPage = () => {
 
     try {
       if (openOTP) {
-        const { data } = await axios.post(
-          "https://hotelbookingcenter.pythonanywhere.com/api/token/verify-otp/",
-          { phone_number: phonenumber, otp: OTPValue }
-        );
+        // const { data } = await axios.post(
+        //   "https://hotelbookingcenter.pythonanywhere.com/api/token/verify-otp/",
+        //   { phone_number: phonenumber, otp: OTPValue }
+        // );
+        // setIsLoading(false);
+        // setOpenOTP(false);
+        // router.push("/");
+        // localStorage.setItem("user", JSON.stringify(data));
+        await signIn("credentials", {
+          phonenumber,
+          OTPValue,
+          redirect: true,
+          callbackUrl: "/",
+        });
         setIsLoading(false);
-        setOpenOTP(false);
         router.push("/");
-        localStorage.setItem("user", JSON.stringify(data));
       } else {
         const { data } = await axios.post(
           "https://hotelbookingcenter.pythonanywhere.com/api/token/generate-otp/",

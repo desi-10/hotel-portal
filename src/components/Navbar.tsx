@@ -5,8 +5,18 @@ import { Button } from "./ui/button";
 import { Heart, ShoppingBag, Menu } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "./Session";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
+  const session = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { user } = useAuth();
@@ -55,9 +65,20 @@ const Navbar = () => {
             </li>
           </ul> */}
 
-          {user ? (
-            <div className=" truncate w-20 border px-3 py-1 rounded-lg">
-              {user?.refresh}
+          {session.data?.user?.name ? (
+            <div className="border px-3 py-1 rounded-lg">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  {session.data?.user?.name}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
             <div className="flex items-center space-x-3">
@@ -100,9 +121,20 @@ const Navbar = () => {
               <ShoppingBag />
             </li>
           </ul> */}
-          {user ? (
-            <div className="truncate w-20 border px-3 py-1 rounded-lg">
-              {user?.refresh}
+          {session.data?.user?.name ? (
+            <div className="border px-3 py-1 rounded-lg">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  {session.data?.user?.name}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
             <div className="flex flex-col items-center space-y-3">

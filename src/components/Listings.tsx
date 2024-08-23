@@ -48,11 +48,7 @@ function Listings() {
 
   return (
     <main className="py-10 px-3">
-      <SectionHeader
-        mainText="The Latest Listings"
-        subText="newest listings"
-        description="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-      />
+      <SectionHeader mainText="The Latest Listings" subText="newest listings" />
 
       <div className="relative mt-10">
         <div

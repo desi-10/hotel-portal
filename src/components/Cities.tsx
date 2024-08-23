@@ -53,7 +53,6 @@ const Cities = () => {
         <SectionHeader
           mainText="Explore Best Cities"
           subText="Catalog of Categories"
-          description="Discover the most popular cities around the world."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-2 gap-5 mt-10">
