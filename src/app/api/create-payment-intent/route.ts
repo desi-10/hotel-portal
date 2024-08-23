@@ -16,10 +16,10 @@ export async function POST(request: NextRequest) {
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: "GHC",
             product_data: {
               name: room?.room_number || "No room number",
-              images: [room?.image] || ["https://picsum.photos/200/300"],
+              images: [room?.image] || undefined,
             },
             unit_amount: parseFloat(room?.price_per_night) * 100 || 0,
           },
