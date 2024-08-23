@@ -58,6 +58,8 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import CheckoutPage from "@/components/Checkout";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
+import { toast } from "sonner";
+import ClipLoader from "react-spinners/ClipLoader";
 const localizer = momentLocalizer(moment);
 
 const SingleHotel = ({
@@ -171,7 +173,7 @@ const SingleHotel = ({
     event.preventDefault();
 
     if (!checkin || !checkout) {
-      alert("Please select check-in and check-out dates");
+      toast.error("Please enter checkin and checkout dates");
       return;
     }
 
@@ -188,11 +190,7 @@ const SingleHotel = ({
         }
       );
 
-      alert("Booking successful");
-      console.log(checkin);
-      console.log(checkout);
-
-      console.log(data);
+      toast.success("Booking successful");
 
       setCheckin("");
       setCheckout("");
@@ -368,8 +366,15 @@ const SingleHotel = ({
                       disabled={isLoading}
                       className="bg-primaryColor text-white px-5 py-1 flex space-x-3 w-full"
                     >
-                      <p>{isLoading ? "Loading" : "Book Now"}</p>
-                      <ArrowRight className="w-4 h-4" />
+                      {isLoading ? (
+                        <ClipLoader
+                          color="#ffffff"
+                          size={20}
+                          aria-label="Loading Spinner"
+                        />
+                      ) : (
+                        "Book Now"
+                      )}
                     </Button>
                   </form>
                 </div>
@@ -786,63 +791,6 @@ const SingleHotel = ({
               )}
             </div>
           </div>
-
-          <div className="mt-5 p-5 bg-white rounded-lg shadow-lg space-y-5">
-            <div className="flex items-center space-x-3">
-              <div className="w-full">
-                <Label>Check-in</Label>
-                <Input
-                  type="datetime-local"
-                  className="p-2 border w-full"
-                  onChange={(event) => setCheckin(event.target.value)}
-                />
-              </div>
-              <div className="w-full">
-                <Label>Check-out</Label>
-                <Input
-                  type="datetime-local"
-                  className="p-2 border w-full"
-                  onChange={(event) => setCheckout(event.target.value)}
-                />
-              </div>
-            </div>
-            <div>
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a room" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Room</SelectLabel>
-                    {rooms.map((room) => (
-                      <SelectItem
-                        key={room.id}
-                        value={room.id.toString()}
-                        onChange={() => setRoomId(room.id)}
-                      >
-                        {room.room_number}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="bg-primaryColor text-white px-5 py-1 flex space-x-3 w-full"
-              >
-                <p>{isLoading ? "Loading" : "Book Now"}</p>
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </form>
-            {/* <CheckoutPage amount={price} /> */}
-          </div>
-
-          {/* <div className="w-full bg-white rounded-lg p-5 shadow-lg mt-5">
-            <p className="font-bold">Similar Listings</p>
-          </div> */}
         </section>
       </div>
     </main>
