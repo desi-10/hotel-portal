@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       line_items: [
         {
           price_data: {
-            currency: "GHC",
+            currency: "usd",
             product_data: {
               name: room?.room_number || "No room number",
               images: [room?.image] || [

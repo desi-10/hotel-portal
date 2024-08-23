@@ -15,12 +15,13 @@ const SeeAllReviews = ({ review }: { review: ReviewType }) => {
       key={review.id}
       className="flex justify-between items-center space-x-5"
     >
-      <div className="w-28 rounded-full overflow-hidden">
+      <div className="w-20 h-20 rounded-full flex justify-center items-center overflow-hidden">
         <Image
-          src={review.user.profile_picture || ""}
+          src={review.user.profile_picture || "/download.png"}
           alt={review.user.first_name + " " + review.user.last_name}
           width={100}
           height={100}
+          className="w-full h-full object-cover"
         />
       </div>
       <div className="bg-gray-200 w-full p-3 rounded-lg">

@@ -69,7 +69,18 @@ const Navbar = () => {
             <div className="border px-3 py-1 rounded-lg">
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  {session.data?.user?.name}
+                  <div className="flex items-center space-x-3">
+                    <p>{session.data?.user?.name}</p>
+                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                      <Image
+                        src={session.data?.user?.image || "/download.png"}
+                        alt={session.data?.user?.name}
+                        width={50}
+                        height={50}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
