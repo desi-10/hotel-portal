@@ -170,6 +170,42 @@ const SingleHotel = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!checkin || !checkout) {
+      alert("Please select check-in and check-out dates");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const { data } = await axios.post(
+        "https://hotelbookingcenter.pythonanywhere.com/api/bookings/",
+        {
+          checkin: checkin,
+          checkout: checkout,
+          user: 1,
+          room: roomId || selectedRoom?.id,
+        }
+      );
+
+      alert("Booking successful");
+      console.log(checkin);
+      console.log(checkout);
+
+      console.log(data);
+
+      setCheckin("");
+      setCheckout("");
+      setRoomId(0);
+      setIsLoading(false);
+      fetchHotel();
+    } catch (error) {
+      setCheckin("");
+      setCheckout("");
+      setIsLoading(false);
+      console.log(error);
+    }
+
     try {
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
@@ -182,47 +218,11 @@ const SingleHotel = ({
       });
 
       const data = await response.json();
-      // setPaymentIntentUrl(data.paymentIntentUrl);
       window.location.href = data.url;
       console.log(data.url);
     } catch (error) {
       console.error("Error fetching payment intent URL:", error);
     }
-
-    // if (!checkin || !checkout) {
-    //   alert("Please select check-in and check-out dates");
-    //   return;
-    // }
-
-    // setIsLoading(true);
-    // try {
-    //   const { data } = await axios.post(
-    //     "https://hotelbookingcenter.pythonanywhere.com/api/bookings/",
-    //     {
-    //       checkin: checkin,
-    //       checkout: checkout,
-    //       user: 1,
-    //       room: roomId,
-    //     }
-    //   );
-
-    //   alert("Booking successful");
-    //   console.log(checkin);
-    //   console.log(checkout);
-
-    //   console.log(data);
-
-    //   setCheckin("");
-    //   setCheckout("");
-    //   setRoomId(0);
-    //   setIsLoading(false);
-    //   fetchHotel();
-    // } catch (error) {
-    //   setCheckin("");
-    //   setCheckout("");
-    //   setIsLoading(false);
-    //   console.log(error);
-    // }
   };
 
   const [quality, setQuality] = useState(0);
