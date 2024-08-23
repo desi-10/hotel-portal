@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SectionHeader from "./Headers";
 import Wrapper from "./Wrapper";
 import { ArrowRight } from "lucide-react";
@@ -10,8 +10,8 @@ import HotelCard from "./HotelCard";
 import axios from "axios";
 
 const MostPlaces = () => {
-  const [hotels, setHotels] = React.useState<HotelType[]>([]);
-  const [selectedNumber, setSelectedNumber] = React.useState(1);
+  const [hotels, setHotels] = useState<HotelType[]>([]);
+  const [selectedNumber, setSelectedNumber] = useState(1);
 
   useEffect(() => {
     const getHotel = async () => {
@@ -39,6 +39,48 @@ const MostPlaces = () => {
     },
   ];
 
+  const handleFetchData = async (id: number) => {
+    if (id === 1) {
+      const getHotelAndEvents = async () => {
+        const hotelsRes = await axios(
+          "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
+        );
+
+        const eventsRes = await axios(
+          "https://hotelbookingcenter.pythonanywhere.com/api/event-centers/"
+        );
+
+        setHotels([...hotelsRes.data, ...eventsRes.data]);
+      };
+
+      getHotelAndEvents();
+    }
+
+    if (id === 2) {
+      const getHotel = async () => {
+        const { data } = await axios(
+          "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
+        );
+        setHotels(data);
+      };
+
+      getHotel();
+    }
+
+    if (id === 3) {
+      const getEvent = async () => {
+        const { data } = await axios(
+          "https://hotelbookingcenter.pythonanywhere.com/api/event-centers/"
+        );
+
+        setHotels(data);
+      };
+
+      getEvent();
+    }
+    setSelectedNumber(id);
+  };
+
   return (
     <div>
       <div className="px-5 lg:container">
@@ -52,7 +94,7 @@ const MostPlaces = () => {
           <ul className="flex items-center bg-gray-100 [&>li]:cursor-pointer [&>li]:px-5 [&>li]:p-3 divide-x">
             {filterData.map((item) => (
               <li
-                onClick={() => setSelectedNumber(item.id)}
+                onClick={() => handleFetchData(item.id)}
                 key={item.id}
                 className={`${
                   item.id === selectedNumber && "bg-primaryColor text-white"
@@ -65,13 +107,11 @@ const MostPlaces = () => {
         </div>
 
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
-          {hotels.map((hotel, i) => {
-            return (
-              <div key={i}>
-                <HotelCard hotel={hotel} />
-              </div>
-            );
-          })}
+          {hotels.map((hotel, i) => (
+            <div key={i}>
+              <HotelCard hotel={hotel} />
+            </div>
+          ))}
         </div>
 
         <Link href="/listings">

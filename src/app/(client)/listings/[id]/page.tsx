@@ -53,6 +53,12 @@ import {
   MdOutlineSportsTennis,
 } from "react-icons/md";
 import { FaSwimmingPool } from "react-icons/fa";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import CustomToolbar from "@/components/Toolbar";
+
+const localizer = momentLocalizer(moment);
 
 const SingleHotel = ({
   params,
@@ -252,6 +258,47 @@ const SingleHotel = ({
     setSelectedRoom(rooms.find((room) => room.id === id));
   };
 
+  const events = selectedRoom?.booking_list?.map((booking) => ({
+    title: `Booking #${booking.booking_number} (${booking.status})`,
+    start: new Date(booking.checkin),
+    end: new Date(booking.checkout),
+    allDay: false,
+  }));
+
+  const [activeSection, setActiveSection] = useState("top");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["top", "details", "gallery", "menu", "reviews"];
+      const offsets = sections.map(
+        (section) => document.getElementById(section).offsetTop
+      );
+
+      const scrollPosition = window.scrollY + 150;
+
+      for (let i = 0; i < sections.length; i++) {
+        if (
+          scrollPosition >= offsets[i] &&
+          (!offsets[i + 1] || scrollPosition < offsets[i + 1])
+        ) {
+          setActiveSection(sections[i]);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleScrollToSection = (section: string) => {
+    const target = document.getElementById(section);
+    target?.scrollIntoView({ behavior: "smooth" });
+    setActiveSection(section);
+  };
+
   return (
     <main>
       {modal && (
@@ -291,6 +338,17 @@ const SingleHotel = ({
                 <Badge variant="outline">
                   {selectedRoom?.is_available ? "Available" : "Not Available"}
                 </Badge>
+
+                <div className="my-5">
+                  <Calendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    style={{ height: 500 }}
+                    toolbar={false}
+                  />
+                </div>
 
                 <div className="mt-5 space-y-5">
                   <div className="flex items-center space-x-3">
@@ -333,11 +391,46 @@ const SingleHotel = ({
       <section className="container bg-white border-b sticky top-16 z-20">
         <div className="flex justify-between items-center">
           <ul className="flex space-x-3 [&>li]:p-5">
-            <li className="border-b-2 border-blue-500">Top</li>
-            <li>Details</li>
-            <li>Gallery</li>
-            <li>Menu</li>
-            <li>Reviews</li>
+            <li
+              className={`cursor-pointer ${
+                activeSection === "top" ? "border-b-2 border-blue-500" : ""
+              }`}
+              onClick={() => handleScrollToSection("top")}
+            >
+              Top
+            </li>
+            <li
+              className={`cursor-pointer ${
+                activeSection === "details" ? "border-b-2 border-blue-500" : ""
+              }`}
+              onClick={() => handleScrollToSection("details")}
+            >
+              Details
+            </li>
+            <li
+              className={`cursor-pointer ${
+                activeSection === "gallery" ? "border-b-2 border-blue-500" : ""
+              }`}
+              onClick={() => handleScrollToSection("gallery")}
+            >
+              Gallery
+            </li>
+            <li
+              className={`cursor-pointer ${
+                activeSection === "menu" ? "border-b-2 border-blue-500" : ""
+              }`}
+              onClick={() => handleScrollToSection("menu")}
+            >
+              Menu
+            </li>
+            <li
+              className={`cursor-pointer ${
+                activeSection === "reviews" ? "border-b-2 border-blue-500" : ""
+              }`}
+              onClick={() => handleScrollToSection("reviews")}
+            >
+              Reviews
+            </li>
           </ul>
           <div>
             <Button className="bg-primaryColor text-white px-5 py-1 flex space-x-3">
@@ -373,7 +466,10 @@ const SingleHotel = ({
 
       <div className="flex space-x-10 container">
         <section className="w-full">
-          <div className="w-full h-[400px] border overflow-hidden rounded-lg mb-5 bg-white shadow-lg">
+          <div
+            id="top"
+            className="w-full h-[400px] border overflow-hidden rounded-lg mb-5 bg-white shadow-lg"
+          >
             <Image
               src={hotel?.image || ""}
               alt={hotel?.name || "Hotel Image"}
@@ -383,7 +479,10 @@ const SingleHotel = ({
             />
           </div>
 
-          <div className="border rounded-lg bg-white mb-5 shadow-lg">
+          <div
+            id="details"
+            className="border rounded-lg bg-white mb-5 shadow-lg"
+          >
             <p className="p-5 border-b font-bold">Description</p>
             <p className="p-5">{hotel?.description}</p>
 
@@ -465,7 +564,7 @@ const SingleHotel = ({
             </div>
           </div>
 
-          <div className="border rounded-lg bg-white shadow-lg">
+          <div id="gallery" className="border rounded-lg bg-white shadow-lg">
             <p className="p-5 border-b">Gallery</p>
             <div className="relative">
               <div
@@ -501,8 +600,11 @@ const SingleHotel = ({
             </div>
           </div>
 
-          <div className="border rounded-lg bg-white shadow-lg mt-5">
-            <p className="p-5 border-b font-bold">Item Review</p>
+          <div
+            id="reviews"
+            className="border rounded-lg bg-white shadow-lg mt-5"
+          >
+            <p className="p-5 border-b font-bold">Room Review</p>
             <div className="p-5 flex items-center space-x-10 bg-gray-200">
               <div className="flex flex-col space-y-1 justify-center">
                 <div className="text-3xl flex justify-center items-center w-20 h-16 bg-primaryColor text-white rounded-lg ">
@@ -744,9 +846,9 @@ const SingleHotel = ({
             </form>
           </div>
 
-          <div className="w-full bg-white rounded-lg p-5 shadow-lg mt-5">
+          {/* <div className="w-full bg-white rounded-lg p-5 shadow-lg mt-5">
             <p className="font-bold">Similar Listings</p>
-          </div>
+          </div> */}
         </section>
       </div>
     </main>
