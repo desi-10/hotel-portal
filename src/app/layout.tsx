@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { AuthProvider } from "@/components/Session";
+import StripeProvider from "@/components/StripeProvider";
 
 const inter = Raleway({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -22,9 +23,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
-        <body className={inter.className}>
-          <div className="bg-gray-100">{children}</div>
-        </body>
+        <StripeProvider>
+          <body className={inter.className}>
+            <div className="bg-gray-100">{children}</div>
+          </body>
+        </StripeProvider>
       </AuthProvider>
     </html>
   );

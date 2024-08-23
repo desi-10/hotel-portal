@@ -56,8 +56,8 @@ import { FaSwimmingPool } from "react-icons/fa";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import CustomToolbar from "@/components/Toolbar";
-
+import CheckoutPage from "@/components/Checkout";
+import convertToSubcurrency from "@/lib/convertToSubcurrency";
 const localizer = momentLocalizer(moment);
 
 const SingleHotel = ({
@@ -170,40 +170,59 @@ const SingleHotel = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!checkin || !checkout) {
-      alert("Please select check-in and check-out dates");
-      return;
-    }
-
-    setIsLoading(true);
     try {
-      const { data } = await axios.post(
-        "https://hotelbookingcenter.pythonanywhere.com/api/bookings/",
-        {
-          checkin: checkin,
-          checkout: checkout,
-          user: 1,
-          room: roomId,
-        }
-      );
+      const response = await fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          room: selectedRoom,
+        }),
+      });
 
-      alert("Booking successful");
-      console.log(checkin);
-      console.log(checkout);
-
-      console.log(data);
-
-      setCheckin("");
-      setCheckout("");
-      setRoomId(0);
-      setIsLoading(false);
-      fetchHotel();
+      const data = await response.json();
+      // setPaymentIntentUrl(data.paymentIntentUrl);
+      window.location.href = data.url;
+      console.log(data.url);
     } catch (error) {
-      setCheckin("");
-      setCheckout("");
-      setIsLoading(false);
-      console.log(error);
+      console.error("Error fetching payment intent URL:", error);
     }
+
+    // if (!checkin || !checkout) {
+    //   alert("Please select check-in and check-out dates");
+    //   return;
+    // }
+
+    // setIsLoading(true);
+    // try {
+    //   const { data } = await axios.post(
+    //     "https://hotelbookingcenter.pythonanywhere.com/api/bookings/",
+    //     {
+    //       checkin: checkin,
+    //       checkout: checkout,
+    //       user: 1,
+    //       room: roomId,
+    //     }
+    //   );
+
+    //   alert("Booking successful");
+    //   console.log(checkin);
+    //   console.log(checkout);
+
+    //   console.log(data);
+
+    //   setCheckin("");
+    //   setCheckout("");
+    //   setRoomId(0);
+    //   setIsLoading(false);
+    //   fetchHotel();
+    // } catch (error) {
+    //   setCheckin("");
+    //   setCheckout("");
+    //   setIsLoading(false);
+    //   console.log(error);
+    // }
   };
 
   const [quality, setQuality] = useState(0);
@@ -266,32 +285,6 @@ const SingleHotel = ({
   }));
 
   const [activeSection, setActiveSection] = useState("top");
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["top", "details", "gallery", "menu", "reviews"];
-      const offsets = sections.map(
-        (section) => document.getElementById(section).offsetTop
-      );
-
-      const scrollPosition = window.scrollY + 150;
-
-      for (let i = 0; i < sections.length; i++) {
-        if (
-          scrollPosition >= offsets[i] &&
-          (!offsets[i + 1] || scrollPosition < offsets[i + 1])
-        ) {
-          setActiveSection(sections[i]);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const handleScrollToSection = (section: string) => {
     const target = document.getElementById(section);
@@ -432,7 +425,7 @@ const SingleHotel = ({
               Reviews
             </li>
           </ul>
-          <div>
+          {/* <div>
             <Button className="bg-primaryColor text-white px-5 py-1 flex space-x-3">
               <p>Save</p>
               {false ? (
@@ -441,7 +434,7 @@ const SingleHotel = ({
                 <Heart className="w-4 h-4 fill-red-500 text-red-500" />
               )}
             </Button>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -844,6 +837,7 @@ const SingleHotel = ({
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </form>
+            {/* <CheckoutPage amount={price} /> */}
           </div>
 
           {/* <div className="w-full bg-white rounded-lg p-5 shadow-lg mt-5">
