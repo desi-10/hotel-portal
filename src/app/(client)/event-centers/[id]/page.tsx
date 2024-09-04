@@ -1,32 +1,19 @@
 "use client";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  GalleryType,
-  HotelType,
-  ReviewType,
-  RoomType,
-  WorkHoursType,
-} from "@/types/hostelTypes";
-import axios, { AxiosError } from "axios";
-import { ArrowLeft, ArrowRight, Heart, Wifi, X } from "lucide-react";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
+import { useSession } from "next-auth/react";
+import { ArrowLeft, ArrowRight, Heart, Wifi, X } from "lucide-react";
 import { BsArrowUpRightSquare } from "react-icons/bs";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Rating from "@/components/Rating";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -37,15 +24,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import SeeAllReviews from "@/components/SeeAllReviews";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import {
   MdOutlineFastfood,
@@ -56,96 +34,51 @@ import { FaSwimmingPool } from "react-icons/fa";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import CheckoutPage from "@/components/Checkout";
-import convertToSubcurrency from "@/lib/convertToSubcurrency";
-import { toast } from "sonner";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import convertToSubcurrency from "@/lib/convertToSubcurrency";
+import {
+  GalleryType,
+  HotelType,
+  ReviewType,
+  RoomType,
+  WorkHoursType,
+} from "@/types/hostelTypes";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
 const localizer = momentLocalizer(moment);
 
-const SingleHotel = ({
+const SingleEventCenter = ({
   params,
   searchParams,
 }: {
   params: { id: string };
-  searchParams: { hotel__hotel_number: string };
+  searchParams: { event_center_number: string };
 }) => {
   const session = useSession();
-  const [hotel, setHotel] = useState<HotelType | null>(null);
+  const [eventCenters, setEventCenter] = useState<HotelType | any | null>(null);
   const [workhours, setWorkhours] = useState<WorkHoursType[] | null>(null);
-  const [gallery, setGallery] = useState<GalleryType[] | null>(null); // Updated this to match the API response
+  const [gallery, setGallery] = useState<GalleryType[] | null>(null);
   const [reviews, setReviews] = useState<ReviewType[]>([]);
   const [rooms, setRooms] = useState<RoomType[]>([]);
-
-  const [progress, setProgress] = useState(60);
-
-  const fetchHotel = async () => {
-    try {
-      const { data } = await axios.get(
-        `https://hotelbookingcenter.pythonanywhere.com/api/hotels/${searchParams.hotel__hotel_number}/`
-      );
-      console.log(data);
-      setHotel(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchReviews = async () => {
-    try {
-      const { data } = await axios.get(
-        `https://hotelbookingcenter.pythonanywhere.com/api/reviews/?hotel__hotel_number=${searchParams.hotel__hotel_number}`
-      );
-      console.log(data);
-      setReviews(data);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchWorkHours = async () => {
-      try {
-        const { data } = await axios.get(
-          `https://hotelbookingcenter.pythonanywhere.com/api/workhours/?hotel__hotel_number=${searchParams.hotel__hotel_number}`
-        );
-        setWorkhours(data);
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const fetchGallery = async () => {
-      try {
-        const { data } = await axios.get(
-          `https://hotelbookingcenter.pythonanywhere.com/api/gallery/?hotel__hotel_number=${searchParams.hotel__hotel_number}`
-        );
-        setGallery(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const fetchRooms = async () => {
-      try {
-        const { data } = await axios.get(
-          `https://hotelbookingcenter.pythonanywhere.com/api/rooms/?hotel__hotel_number=${searchParams.hotel__hotel_number}`
-        );
-        setRooms(data);
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchGallery();
-    fetchHotel();
-    fetchWorkHours();
-    fetchReviews();
-    fetchRooms();
-  }, [params.id, searchParams.hotel__hotel_number]);
+  const [checkin, setCheckin] = useState("");
+  const [checkout, setCheckout] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [quality, setQuality] = useState(0);
+  const [location, setLocation] = useState(0);
+  const [service, setService] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [message, setMessage] = useState("");
+  const [isAddReviewLoading, setIsAddReviewLoading] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [activeSection, setActiveSection] = useState("top");
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false }, [
     Autoplay({
@@ -158,6 +91,58 @@ const SingleHotel = ({
     }),
   ]);
 
+  const fetchHotel = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://hotelbookingcenter.pythonanywhere.com/api/event-centers/${searchParams.event_center_number}/`
+      );
+      setEventCenter(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://hotelbookingcenter.pythonanywhere.com/api/event-center-reviews/?event_center__event_center_number=${searchParams.event_center_number}`
+      );
+      setReviews(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchGallery = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://hotelbookingcenter.pythonanywhere.com/api/event-center-gallery/?event_center__event_center_number=${searchParams.event_center_number}`
+      );
+      setGallery(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchWorkHours = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://hotelbookingcenter.pythonanywhere.com/api/workhours/?event_center__event_center_number=${searchParams.event_center_number}`
+      );
+      setWorkhours(data);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchGallery();
+    fetchHotel();
+    fetchReviews();
+    fetchWorkHours();
+  }, [params.id, searchParams.event_center_number]);
+
   const scrollPrev = () => {
     if (emblaApi) emblaApi.scrollPrev();
   };
@@ -165,11 +150,6 @@ const SingleHotel = ({
   const scrollNext = () => {
     if (emblaApi) emblaApi.scrollNext();
   };
-
-  const [checkin, setCheckin] = useState("");
-  const [checkout, setCheckout] = useState("");
-  const [roomId, setRoomId] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -181,14 +161,16 @@ const SingleHotel = ({
 
     setIsLoading(true);
 
+    console.log(eventCenters);
+
     try {
       const booking = await axios.post(
-        "https://hotelbookingcenter.pythonanywhere.com/api/bookings/",
+        "https://hotelbookingcenter.pythonanywhere.com/api/event-bookings/",
         {
-          checkin: checkin,
-          checkout: checkout,
-          user: session.data?.user?.id,
-          room: roomId || selectedRoom?.id,
+          start_date: checkin,
+          end_date: checkout,
+          event_center: eventCenters?.id,
+          customer: session?.data?.user?.id,
         }
       );
 
@@ -202,60 +184,50 @@ const SingleHotel = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          room: selectedRoom,
+          room: eventCenters,
           booking: booking.data,
         }),
       });
 
       setCheckin("");
       setCheckout("");
-      setRoomId(0);
       setIsLoading(false);
       fetchHotel();
 
       const data = await response.json();
       window.location.href = data.url;
-      console.log(data.url);
     } catch (error) {
-      setCheckin("");
-      setCheckout("");
+      console.log(error);
+
       setIsLoading(false);
       if (error instanceof AxiosError) {
-        console.log(error.response?.data);
-
         toast.error(
           error.response?.data?.error || "Error fetching payment intent URL"
         );
         return;
       }
       console.error("Error fetching payment intent URL:", error);
-      console.log(error);
     }
   };
-
-  const [quality, setQuality] = useState(0);
-  const [location, setLocation] = useState(0);
-  const [service, setService] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [message, setMessage] = useState("");
-  const [isAddReviewLoading, setIsAddReviewLoading] = useState(false);
 
   const handleAddReview = async () => {
     setIsAddReviewLoading(true);
     try {
       const { data } = await axios.post(
-        "https://hotelbookingcenter.pythonanywhere.com/api/reviews/",
+        "https://hotelbookingcenter.pythonanywhere.com/api/event-center-reviews/",
         {
-          hotel: params.id,
+          event_center: eventCenters?.id,
           quality_rating: quality,
           location_rating: location,
           service_rating: service,
           price_rating: price,
-          user: session.data?.user?.id,
+          user: session?.data?.user?.id,
           review: message,
         }
       );
+
       console.log(data);
+
       setIsAddReviewLoading(false);
       setMessage("");
       setQuality(0);
@@ -269,32 +241,16 @@ const SingleHotel = ({
     }
   };
 
-  const overallRating =
-    ((hotel?.avg_ratings?.average_price_rating || 0) +
-      (hotel?.avg_ratings?.average_location_rating || 0) +
-      (hotel?.avg_ratings?.average_quality_rating || 0) +
-      (hotel?.avg_ratings?.average_service_rating || 0)) /
-    4;
-
-  const [modal, setModal] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState<RoomType | undefined>(
-    undefined
-  );
-  const handleRooms = (id: number) => {
-    setModal(true);
-    setSelectedRoom(rooms.find((room) => room.id === id));
-  };
-
-  const events = selectedRoom?.booking_list
-    ?.filter((booking) => booking.status === "confirmed")
-    ?.map((booking) => ({
-      title: `Booking #${booking.booking_number} (${booking.status})`,
-      start: new Date(booking.checkin),
-      end: new Date(booking.checkout),
+  const events = eventCenters?.booking_list
+    ?.filter((booking: any) => booking.status === "confirmed")
+    ?.map((booking: any) => ({
+      title: `Booked (${booking.status})`,
+      start: new Date(booking.start_date),
+      end: new Date(booking.end_date),
       allDay: false,
     }));
 
-  const [activeSection, setActiveSection] = useState("top");
+  console.log(events);
 
   const handleScrollToSection = (section: string) => {
     const target = document.getElementById(section);
@@ -302,118 +258,15 @@ const SingleHotel = ({
     setActiveSection(section);
   };
 
+  const overallRating =
+    ((eventCenters?.avg_ratings?.average_price_rating || 0) +
+      (eventCenters?.avg_ratings?.average_location_rating || 0) +
+      (eventCenters?.avg_ratings?.average_quality_rating || 0) +
+      (eventCenters?.avg_ratings?.average_service_rating || 0)) /
+    4;
+
   return (
     <main>
-      {modal && (
-        <section className="flex justify-center items-center fixed inset-0 w-screen h-screen bg-black/80 z-50">
-          <div className="relative h-[90%] w-[90%] bg-white rounded-lg p-5 overflow-auto">
-            <button
-              className="rounded-full bg-red-500 text-white w-fit ml-auto flex justify-center items-center p-2"
-              onClick={() => {
-                setModal(false);
-              }}
-            >
-              <X className="w-4 h-4" />
-            </button>
-            {/* <h1 className="text-3xl font-bold">Room Details</h1> */}
-            <div className="flex justify-between space-x-5">
-              <div className="w-full space-y-5">
-                <h2 className="text-3xl font-bold">
-                  {selectedRoom?.room_number}
-                </h2>
-
-                <div className="flex justify-between items-center w-full h-96 rounded-lg bg-black overflow-hidden">
-                  <Image
-                    src={selectedRoom?.image || ""}
-                    width={600}
-                    height={600}
-                    alt="logo"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-
-                <div className="space-y-5 shadow-lg rounded-lg">
-                  <p className="text-lg font-bold p-3 border-b">Description</p>
-                  <p className="p-3">{selectedRoom?.description}</p>
-                </div>
-                <div className="flex justify-between items-center bg-white shadow-lg rounded-lg p-3">
-                  <p className="font-bold">Price</p>
-                  <p className="text-xl">{selectedRoom?.price_per_night}</p>
-                </div>
-                <div className="flex justify-between items-center bg-white shadow-lg rounded-lg p-3">
-                  <p className="font-bold">Room Type</p>
-                  <p>{selectedRoom?.room_type}</p>
-                </div>
-              </div>
-              <div className="w-[500px] h-fit bg-white rounded-lg shadow-lg p-5">
-                <Badge variant="outline">
-                  {selectedRoom?.is_available ? "Available" : "Not Available"}
-                </Badge>
-
-                <div className="my-5">
-                  <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{ height: 500 }}
-                    toolbar={false}
-                  />
-                </div>
-
-                <div className="mt-5 space-y-5">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-full">
-                      <Label>Check-in</Label>
-                      <Input
-                        type="datetime-local"
-                        className="p-2 border w-full"
-                        onChange={(event) => setCheckin(event.target.value)}
-                      />
-                    </div>
-                    <div className="w-full">
-                      <Label>Check-out</Label>
-                      <Input
-                        type="datetime-local"
-                        className="p-2 border w-full"
-                        onChange={(event) => setCheckout(event.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <form onSubmit={handleSubmit}>
-                    {session.data?.user?.id ? (
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="bg-primaryColor text-white px-5 py-1 flex space-x-3 w-full"
-                      >
-                        {isLoading ? (
-                          <ClipLoader
-                            color="#ffffff"
-                            size={20}
-                            aria-label="Loading Spinner"
-                          />
-                        ) : (
-                          "Book Now"
-                        )}
-                      </Button>
-                    ) : (
-                      <Link href="/auth">
-                        <Button
-                          type="button"
-                          className="bg-primaryColor text-white px-5 py-1 flex space-x-3 w-full"
-                        >
-                          Login to Book
-                        </Button>
-                      </Link>
-                    )}
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
       <div className="relative h-96 bg-[url('/22.jpg')] bg-fixed bg-center bg-cover">
         <div className="absolute inset-0 bg-black/75"></div>
       </div>
@@ -486,7 +339,7 @@ const SingleHotel = ({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{hotel?.name}</BreadcrumbPage>
+              <BreadcrumbPage>{eventCenters?.name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -500,8 +353,8 @@ const SingleHotel = ({
             className="w-full h-[400px] border overflow-hidden rounded-lg mb-5 bg-white shadow-lg"
           >
             <Image
-              src={hotel?.image || ""}
-              alt={hotel?.name || "Hotel Image"}
+              src={eventCenters?.image || ""}
+              alt={eventCenters?.name || "Hotel Image"}
               width={500}
               height={500}
               className="object-cover w-full h-full"
@@ -513,11 +366,11 @@ const SingleHotel = ({
             className="border rounded-lg bg-white mb-5 shadow-lg"
           >
             <p className="p-5 border-b font-bold">Description</p>
-            <p className="p-5">{hotel?.description}</p>
+            <p className="p-5">{eventCenters?.description}</p>
 
             <div className="py-3">
-              {hotel?.website && (
-                <Link href={hotel.website} className="p-5">
+              {eventCenters?.website && (
+                <Link href={eventCenters.website} className="p-5">
                   <Button>Website</Button>
                 </Link>
               )}
@@ -526,120 +379,84 @@ const SingleHotel = ({
 
           <div className="border rounded-lg bg-white mb-5 shadow-lg">
             <p className="p-5 border-b font-bold">Facilities</p>
-            <ul className="p-5">
-              {hotel?.facilities && (
-                <div className="flex space-x-3 items-center">
-                  {hotel.facilities?.has_wifi && (
-                    <li>
-                      <Wifi className="w-4 h-4" />
-                    </li>
-                  )}
-                  {hotel.facilities?.has_breakfast_in_bed && (
-                    <li>
-                      <MdOutlineFastfood className="w-4 h-4" />
-                    </li>
-                  )}
-                  {hotel.facilities?.has_conference_room && (
-                    <li>
-                      <MdOutlineMeetingRoom className="w-4 h-4" />
-                    </li>
-                  )}
-                  {hotel.facilities?.has_swimming_pool && (
-                    <li>
-                      <FaSwimmingPool className="w-4 h-4" />
-                    </li>
-                  )}
-                  {hotel.facilities?.has_tennis_court && (
-                    <li>
-                      <MdOutlineSportsTennis className="w-4 h-4" />
-                    </li>
-                  )}
-                </div>
-              )}
-            </ul>
-          </div>
-
-          <div className="border rounded-lg bg-white mb-5 shadow-lg ">
-            <p className="p-5 border-b font-bold">Rooms</p>
-            {rooms.length === 0 ? (
-              <p className="p-5">No rooms available</p>
+            {!eventCenters?.facilities ||
+            Object.keys(eventCenters.facilities).length === 0 ? (
+              <div className="p-5 text-center">No facilities available</div>
             ) : (
-              <ul className="grid grid-cols-2">
-                {rooms?.slice(0, 3).map((room) => (
-                  <li
-                    key={room.id}
-                    onClick={() => handleRooms(room.id)}
-                    className="flex flex-col p-5 cursor-pointer"
-                  >
-                    <div className="w-full h-[200px] rounded-lg overflow-hidden">
-                      <Image
-                        src={room?.image || ""}
-                        alt={room?.room_number || "Room Image"}
-                        width={600}
-                        height={600}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className="flex justify-center items-center text-sm">
-                        <span className="text-xs mr-2">Room number</span>
-                        <p className="font-bold">
-                          {room?.room_number || "Not available"}
-                        </p>
-                      </p>
-                      <p className="flex justify-center items-center text-sm">
-                        <span className="text-xs mr-2">Price per night</span>
-                        <p className="font-bold">{room?.price_per_night}</p>
-                      </p>
-                    </div>
-                  </li>
-                ))}
+              <ul className="p-5">
+                {eventCenters?.facilities && (
+                  <div className="flex space-x-3 items-center">
+                    {eventCenters.facilities?.has_wifi && (
+                      <li>
+                        <Wifi className="w-4 h-4" />
+                      </li>
+                    )}
+                    {eventCenters.facilities?.has_breakfast_in_bed && (
+                      <li>
+                        <MdOutlineFastfood className="w-4 h-4" />
+                      </li>
+                    )}
+                    {eventCenters?.facilities?.has_conference_room && (
+                      <li>
+                        <MdOutlineMeetingRoom className="w-4 h-4" />
+                      </li>
+                    )}
+                    {eventCenters.facilities?.has_swimming_pool && (
+                      <li>
+                        <FaSwimmingPool className="w-4 h-4" />
+                      </li>
+                    )}
+                    {eventCenters.facilities?.has_tennis_court && (
+                      <li>
+                        <MdOutlineSportsTennis className="w-4 h-4" />
+                      </li>
+                    )}
+                  </div>
+                )}
               </ul>
-            )}
-
-            {rooms.length > 3 && (
-              <div className="p-5">
-                <Button variant={"outline"} className="flex w-fit ml-auto">
-                  <p>View All Rooms</p>
-                </Button>
-              </div>
             )}
           </div>
 
           <div id="gallery" className="border rounded-lg bg-white shadow-lg">
             <p className="p-5 border-b">Gallery</p>
-            <div className="relative">
-              <div
-                className="flex justify-center items-center absolute bg-primaryColor text-white border h-10 w-10 z-10  rounded-r-full left-0 top-1/2 -translate-y-1/2  group-hover/name:opacity-100 transition-all duration-300 cursor-pointer"
-                onClick={scrollPrev}
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </div>
-              <div
-                className="flex justify-center items-center absolute bg-primaryColor text-white border h-10 w-10 z-10 rounded-l-full right-0 top-1/2 -translate-y-1/2  group-hover/name:opacity-100 transition-all duration-300 cursor-pointer"
-                onClick={scrollNext}
-              >
-                <ArrowRight className="h-4 w-4" />
-              </div>
-              <div className="embla" ref={emblaRef}>
-                <div className="flex w-full p-2 overflow-hidden">
-                  {gallery?.map((image) => (
-                    <div
-                      key={image.id}
-                      className="h-44 overflow-hidden mx-3 rounded-lg flex-shrink-0"
-                    >
-                      <Image
-                        src={image.image || ""}
-                        alt={image.image || "Hotel Image"}
-                        width={500}
-                        height={500}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                  ))}
+            {gallery?.length === 0 ? (
+              <div className="text-center p-5">No gallery available</div>
+            ) : (
+              <div className="relative">
+                <div
+                  className="flex justify-center items-center absolute bg-primaryColor text-white border h-10 w-10 z-10  rounded-r-full left-0 top-1/2 -translate-y-1/2  group-hover/name:opacity-100 transition-all duration-300 cursor-pointer"
+                  onClick={scrollPrev}
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </div>
+                <div
+                  className="flex justify-center items-center absolute bg-primaryColor text-white border h-10 w-10 z-10 rounded-l-full right-0 top-1/2 -translate-y-1/2  group-hover/name:opacity-100 transition-all duration-300 cursor-pointer"
+                  onClick={scrollNext}
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </div>
+
+                <div className="embla" ref={emblaRef}>
+                  <div className="flex w-full p-2 overflow-hidden">
+                    {gallery?.map((image) => (
+                      <div
+                        key={image.id}
+                        className="h-44 overflow-hidden mx-3 rounded-lg flex-shrink-0"
+                      >
+                        <Image
+                          src={image?.image || ""}
+                          alt={image?.image || "Hotel Image"}
+                          width={500}
+                          height={500}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  x
                 </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div
@@ -661,7 +478,8 @@ const SingleHotel = ({
                     <Label>Quality</Label>
                     <Progress
                       value={
-                        (hotel?.avg_ratings?.average_quality_rating ?? 0) * 20
+                        (eventCenters?.avg_ratings?.average_quality_rating ??
+                          0) * 20
                       }
                       className="w-full"
                     />
@@ -670,7 +488,8 @@ const SingleHotel = ({
                     <Label>Location</Label>
                     <Progress
                       value={
-                        (hotel?.avg_ratings?.average_location_rating ?? 0) * 20
+                        (eventCenters?.avg_ratings?.average_location_rating ??
+                          0) * 20
                       }
                       className="w-full text-primaryColor"
                     />
@@ -682,7 +501,8 @@ const SingleHotel = ({
                     <Label>Price</Label>
                     <Progress
                       value={
-                        (hotel?.avg_ratings?.average_price_rating ?? 0) * 20
+                        (eventCenters?.avg_ratings?.average_price_rating ?? 0) *
+                        20
                       }
                       className="w-full"
                     />
@@ -691,7 +511,8 @@ const SingleHotel = ({
                     <Label>Service</Label>
                     <Progress
                       value={
-                        (hotel?.avg_ratings?.average_service_rating ?? 0) * 20
+                        (eventCenters?.avg_ratings?.average_service_rating ??
+                          0) * 20
                       }
                       className="w-full"
                     />
@@ -837,10 +658,72 @@ const SingleHotel = ({
               )}
             </div>
           </div>
+
+          <div className="p-5 rounded-lg bg-white shadow-lg mt-4 w-full">
+            <div className="my-5">
+              <Calendar
+                localizer={localizer}
+                events={events}
+                startAccessor="start"
+                endAccessor="end"
+                style={{ height: 500 }}
+                toolbar={false}
+                className="w-[400px] mx-auto"
+              />
+            </div>
+            <div className="my-5 space-y-5">
+              <div className="flex items-center space-x-3">
+                <div className="w-full">
+                  <Label>Check-in</Label>
+                  <Input
+                    type="datetime-local"
+                    className="p-2 border w-full"
+                    onChange={(event) => setCheckin(event.target.value)}
+                  />
+                </div>
+                <div className="w-full">
+                  <Label>Check-out</Label>
+                  <Input
+                    type="datetime-local"
+                    className="p-2 border w-full"
+                    onChange={(event) => setCheckout(event.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <form onSubmit={handleSubmit}>
+              {session?.data?.user?.id ? (
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-primaryColor text-white px-5 py-1 flex space-x-3 w-full"
+                >
+                  {isLoading ? (
+                    <ClipLoader
+                      color="#ffffff"
+                      size={20}
+                      aria-label="Loading Spinner"
+                    />
+                  ) : (
+                    "Book Now"
+                  )}
+                </Button>
+              ) : (
+                <Link href="/auth">
+                  <Button
+                    type="button"
+                    className="bg-primaryColor text-white px-5 py-1 flex space-x-3 w-full"
+                  >
+                    Login to Book
+                  </Button>
+                </Link>
+              )}
+            </form>
+          </div>
         </section>
       </div>
     </main>
   );
 };
 
-export default SingleHotel;
+export default SingleEventCenter;

@@ -42,13 +42,12 @@ const MostPlaces = () => {
   const handleFetchData = async (id: number) => {
     if (id === 1) {
       const getHotelAndEvents = async () => {
-        const hotelsRes = await axios(
-          "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
-        );
-
-        const eventsRes = await axios(
-          "https://hotelbookingcenter.pythonanywhere.com/api/event-centers/"
-        );
+        const [hotelsRes, eventsRes] = await Promise.all([
+          axios("https://hotelbookingcenter.pythonanywhere.com/api/hotels/"),
+          axios(
+            "https://hotelbookingcenter.pythonanywhere.com/api/event-centers/"
+          ),
+        ]);
 
         setHotels([...hotelsRes.data, ...eventsRes.data]);
       };
@@ -80,6 +79,8 @@ const MostPlaces = () => {
     }
     setSelectedNumber(id);
   };
+
+  console.log(hotels);
 
   return (
     <div>

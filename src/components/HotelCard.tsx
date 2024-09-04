@@ -14,10 +14,16 @@ import { HotelType } from "@/types/hostelTypes";
 import Link from "next/link";
 import { FaSwimmingPool } from "react-icons/fa";
 
-const HotelCard = ({ hotel }: { hotel: HotelType }) => {
+const HotelCard = ({ hotel }: { hotel: HotelType | any }) => {
+  console.log(hotel);
+
   return (
     <Link
-      href={`/listings/${hotel.id}/?hotel__hotel_number=${hotel.hotel_number}`}
+      href={
+        hotel?.event_center_number
+          ? `/event-centers/${hotel.id}/?event_center_number=${hotel?.event_center_number}`
+          : `/listings/${hotel.id}/?hotel__hotel_number=${hotel.hotel_number}`
+      }
     >
       <div className="border rounded-2xl overflow-hidden text-sm shadow-lg transition-transform duration-300 hover:scale-105">
         <div className="w-full h-56 sm:h-48 lg:h-56">

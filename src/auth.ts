@@ -28,10 +28,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
           );
 
+          console.log(response.data);
+
           const user = {
             ...response.data,
-            name: credentials.phonenumber,
-            id: credentials.phonenumber,
+            name: response.data?.phone_number,
+            id: response.data?.user_id,
           }; // Adjust based on the shape of your API response
 
           console.log(user);
@@ -50,5 +52,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async session({ session, token, user }) {
+      session.user = {
+        ...session.user,
+        ...token,
+        id: token.sub as string,
+      } as any;
+      return session;
+    },
+  },
   session: { strategy: "jwt" },
 });

@@ -25,7 +25,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const ListingPage = ({
+const EventCenters = ({
   params,
   searchParams,
 }: {
@@ -41,7 +41,7 @@ const ListingPage = ({
       try {
         if (searchParams.query) {
           const { data } = await axios(
-            `https://hotelbookingcenter.pythonanywhere.com/api/hotels/?search=${searchParams.query}`
+            `https://hotelbookingcenter.pythonanywhere.com/api/event-centers/?name=${searchParams.query}`
           );
           setHotel(data);
           setIsLoading(false);
@@ -57,13 +57,10 @@ const ListingPage = ({
           return;
         }
 
-        const [hotelsRes, eventsRes] = await Promise.all([
-          axios("https://hotelbookingcenter.pythonanywhere.com/api/hotels/"),
-          axios(
-            "https://hotelbookingcenter.pythonanywhere.com/api/event-centers/"
-          ),
-        ]);
-        setHotel([...hotelsRes.data, ...eventsRes.data]);
+        const { data } = await axios(
+          "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
+        );
+        setHotel(data);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
@@ -241,4 +238,4 @@ const ListingPage = ({
   );
 };
 
-export default ListingPage;
+export default EventCenters;
