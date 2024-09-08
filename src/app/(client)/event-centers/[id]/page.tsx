@@ -154,6 +154,11 @@ const SingleEventCenter = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (new Date(checkout) <= new Date(checkin)) {
+      toast.error("Checkout date must be after checkin date");
+      return;
+    }
+
     if (!checkin || !checkout) {
       toast.error("Please enter checkin and checkout dates");
       return;
@@ -186,6 +191,7 @@ const SingleEventCenter = ({
         body: JSON.stringify({
           room: eventCenters,
           booking: booking.data,
+          event: "event",
         }),
       });
 
@@ -202,7 +208,7 @@ const SingleEventCenter = ({
       setIsLoading(false);
       if (error instanceof AxiosError) {
         toast.error(
-          error.response?.data?.error || "Error fetching payment intent URL"
+          "This event center is already booked for the selected period."
         );
         return;
       }

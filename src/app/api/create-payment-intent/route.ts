@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: NextRequest) {
   try {
-    const { room, booking } = await request.json();
+    const { room, booking, event } = await request.json();
 
     console.log(booking);
     console.log(room);
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         booking.id
       }&amount=${
         booking?.total_cost || booking?.total_price
-      }&payment_method=card&event=${room?.event_center_number}`,
+      }&payment_method=card&event=${event ? room?.id : "undefined"}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
     });
 

@@ -111,7 +111,7 @@ const ListingPage = ({
     <main>
       <div className="relative h-96 bg-[url('/33.jpg')] bg-fixed bg-center bg-cover flex justify-center items-center">
         <div className="absolute inset-0 bg-black/75"></div>
-        <div className="relative z-10 text-center text-white px-4 py-6 max-w-md">
+        <div className="relative z-10 text-center text-white px-4 py-6 max-w-xl">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Explore Our Listings
           </h1>

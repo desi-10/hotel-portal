@@ -209,6 +209,7 @@ const SingleHotel = ({
         body: JSON.stringify({
           room: selectedRoom,
           booking: booking.data,
+          event: "",
         }),
       });
 
