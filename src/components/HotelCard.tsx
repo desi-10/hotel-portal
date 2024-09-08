@@ -38,7 +38,7 @@ const HotelCard = ({ hotel }: { hotel: HotelType | any }) => {
         <div className="rounded-t-3xl bg-white -mt-4 relative z-10 flex flex-col justify-between h-[240px]">
           <header className="border-b py-3 px-5 space-y-2">
             <div className="flex items-center space-x-2">
-              <p className="text-lg font-bold hover:text-blue-500">
+              <p className="text-lg font-bold hover:text-blue-500 line-clamp-1">
                 {hotel.name}
               </p>
               <div className="bg-green-500 rounded-full p-2 text-white">
@@ -88,7 +88,7 @@ const HotelCard = ({ hotel }: { hotel: HotelType | any }) => {
               <p className="bg-blue-200 rounded-full p-2 text-white">
                 <RiHome5Line className="w-5 h-5" />
               </p>
-              <p>{hotel.name}</p>
+              <p className="text-sm line-clamp-1">{hotel.name}</p>
             </div>
             <div className="flex items-center space-x-2 p-3">
               <IoMailOutline className="w-5 h-5" />

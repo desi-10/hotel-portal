@@ -174,10 +174,8 @@ const SingleHotel = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-
-
-    if (checkin < checkout) {
-      toast.error("Checkin date must be after today");
+    if (new Date(checkout) <= new Date(checkin)) {
+      toast.error("Checkout date must be after checkin date");
       return;
     }
 
