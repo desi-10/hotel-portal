@@ -127,7 +127,7 @@ const SingleEventCenter = ({
   const fetchWorkHours = async () => {
     try {
       const { data } = await axios.get(
-        `https://hotelbookingcenter.pythonanywhere.com/api/workhours/?event_center__event_center_number=${searchParams.event_center_number}`
+        `https://hotelbookingcenter.pythonanywhere.com/api/event-center-workhours/?event_center__event_center_number=${searchParams.event_center_number}/`
       );
       setWorkhours(data);
       console.log(data);
