@@ -39,6 +39,7 @@ const BookingConfirmationPage = ({
               amount: parseFloat(amount),
               payment_method: payment_method,
               event_center_booking: event,
+              status: "confirmed",
             }
           );
         } else {
@@ -48,6 +49,7 @@ const BookingConfirmationPage = ({
               booking: booking,
               amount: parseFloat(amount),
               payment_method: payment_method,
+              status: "confirmed",
             }
           );
         }
