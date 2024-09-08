@@ -38,14 +38,18 @@ const HeroSection = () => {
         </p>
 
         <div className="flex flex-wrap items-center justify-center space-x-8">
-          <div className="flex flex-col justify-center items-center hover:cursor-pointer hover:text-blue-500 hover:underline">
-            <BsCalendarEvent className="w-7 h-7 md:w-10 md:h-10" />
-            <p>Event centers</p>
-          </div>
-          <div className="flex flex-col justify-center items-center hover:cursor-pointer hover:text-blue-500 hover:underline">
-            <MdOutlineLocalHotel className="w-7 h-7 md:w-10 md:h-10" />
-            <p>Hotels</p>
-          </div>
+          <Link href="/listings">
+            <div className="flex flex-col justify-center items-center hover:cursor-pointer hover:text-blue-500 hover:underline">
+              <BsCalendarEvent className="w-6 h-6 md:w-10 md:h-10" />
+              <p>Event centers</p>
+            </div>
+          </Link>
+          <Link href="/listings">
+            <div className="flex flex-col justify-center items-center hover:cursor-pointer hover:text-blue-500 hover:underline">
+              <MdOutlineLocalHotel className="w-7 h-7 md:w-10 md:h-10" />
+              <p>Hotels</p>
+            </div>
+          </Link>
         </div>
       </div>
       <div className="absolute top-0 left-0 w-full h-full bg-black/70"></div>
