@@ -174,6 +174,13 @@ const SingleHotel = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+
+
+    if (checkin < checkout) {
+      toast.error("Checkin date must be after today");
+      return;
+    }
+
     if (!checkin || !checkout) {
       toast.error("Please enter checkin and checkout dates");
       return;
@@ -217,15 +224,11 @@ const SingleHotel = ({
       window.location.href = data.url;
       console.log(data.url);
     } catch (error) {
-      setCheckin("");
-      setCheckout("");
+      console.log(error);
       setIsLoading(false);
       if (error instanceof AxiosError) {
         console.log(error.response?.data);
-
-        toast.error(
-          error.response?.data?.error || "Error fetching payment intent URL"
-        );
+        toast.error("Date already booked");
         return;
       }
       console.error("Error fetching payment intent URL:", error);

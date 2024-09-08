@@ -56,27 +56,29 @@ const Cities = () => {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-2 gap-5 mt-10">
-          {getUniqueCities(hotels).map((city, i) => (
-            <Link
-              href={`/listings/?city=${city}`}
-              key={i}
-              className="h-72 bg-black lg:last:col-span-2 rounded-lg shadow-md overflow-hidden relative"
-            >
-              <Image
-                src={getCityImage(city)}
-                alt={city}
-                width={500}
-                height={500}
-                className="object-cover w-full h-full"
-              />
-              <div className="absolute top-5 left-5 flex justify-center z-10 backdrop-blur w-fit p-1 rounded-lg">
-                <p className="text-sm text-white flex items-center justify-center bg-primaryColor w-full px-5 py-1 rounded-lg">
-                  {city}
-                </p>
-              </div>
-              <div className="absolute inset-0 bg-slate-600/20 flex items-center justify-center" />
-            </Link>
-          ))}
+          {getUniqueCities(hotels)
+            ?.slice(0, 5)
+            ?.map((city, i) => (
+              <Link
+                href={`/listings/?city=${city}`}
+                key={i}
+                className="h-72 bg-black lg:last:col-span-2 rounded-lg shadow-md overflow-hidden relative"
+              >
+                <Image
+                  src={Object.entries(cityImages)[i][1]}
+                  alt={city}
+                  width={500}
+                  height={500}
+                  className="object-cover w-full h-full"
+                />
+                <div className="absolute top-5 left-5 flex justify-center z-10 backdrop-blur w-fit p-1 rounded-lg">
+                  <p className="text-sm text-white flex items-center justify-center bg-primaryColor w-full px-5 py-1 rounded-lg">
+                    {city}
+                  </p>
+                </div>
+                <div className="absolute inset-0 bg-slate-600/20 flex items-center justify-center" />
+              </Link>
+            ))}
         </div>
 
         <div className="flex justify-center mt-10 bg-gray-300 w-fit mx-auto rounded-lg p-1.5">
