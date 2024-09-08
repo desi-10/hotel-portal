@@ -29,6 +29,8 @@ const BookingConfirmationPage = ({
 
     const { booking, amount, payment_method, event } = searchParams;
 
+    console.log(event);
+
     const makePayment = async () => {
       try {
         if (event !== "undefined") {
@@ -38,7 +40,7 @@ const BookingConfirmationPage = ({
               booking: booking,
               amount: parseFloat(amount),
               payment_method: payment_method,
-              event_center_booking: event,
+              event_center_booking: parseInt(event),
               status: "confirmed",
             }
           );

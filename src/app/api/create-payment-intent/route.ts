@@ -41,7 +41,9 @@ export async function POST(request: NextRequest) {
         booking.id
       }&amount=${
         booking?.total_cost || booking?.total_price
-      }&payment_method=card&event=${event ? room?.id : "undefined"}`,
+      }&payment_method=card&event=${
+        event === "event" ? booking?.id : undefined
+      }`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
     });
 
