@@ -8,20 +8,28 @@ import { HotelType } from "@/types/hostelTypes";
 import Link from "next/link";
 import HotelCard from "./HotelCard";
 import axios from "axios";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const MostPlaces = () => {
   const [hotels, setHotels] = useState<HotelType[]>([]);
   const [selectedNumber, setSelectedNumber] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const getHotel = async () => {
-      const { data } = await axios(
-        "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
-      );
-      setHotels(data);
+    const getHotelAndEvents = async () => {
+      setIsLoading(true);
+      const [hotelsRes, eventsRes] = await Promise.all([
+        axios("https://hotelbookingcenter.pythonanywhere.com/api/hotels/"),
+        axios(
+          "https://hotelbookingcenter.pythonanywhere.com/api/event-centers/"
+        ),
+      ]);
+
+      setHotels([...hotelsRes.data, ...eventsRes.data]);
+      setIsLoading(false);
     };
 
-    getHotel();
+    getHotelAndEvents();
   }, []);
 
   const filterData = [
@@ -42,6 +50,7 @@ const MostPlaces = () => {
   const handleFetchData = async (id: number) => {
     if (id === 1) {
       const getHotelAndEvents = async () => {
+        setIsLoading(true);
         const [hotelsRes, eventsRes] = await Promise.all([
           axios("https://hotelbookingcenter.pythonanywhere.com/api/hotels/"),
           axios(
@@ -50,6 +59,7 @@ const MostPlaces = () => {
         ]);
 
         setHotels([...hotelsRes.data, ...eventsRes.data]);
+        setIsLoading(false);
       };
 
       getHotelAndEvents();
@@ -57,10 +67,12 @@ const MostPlaces = () => {
 
     if (id === 2) {
       const getHotel = async () => {
+        setIsLoading(true);
         const { data } = await axios(
           "https://hotelbookingcenter.pythonanywhere.com/api/hotels/"
         );
         setHotels(data);
+        setIsLoading(false);
       };
 
       getHotel();
@@ -68,11 +80,13 @@ const MostPlaces = () => {
 
     if (id === 3) {
       const getEvent = async () => {
+        setIsLoading(true);
         const { data } = await axios(
           "https://hotelbookingcenter.pythonanywhere.com/api/event-centers/"
         );
 
         setHotels(data);
+        setIsLoading(false);
       };
 
       getEvent();
@@ -102,6 +116,13 @@ const MostPlaces = () => {
             ))}
           </ul>
         </div>
+
+        {isLoading && (
+          <div className="flex justify-center items-center mt-10">
+            <ClipLoader color="black" loading={isLoading} />
+            <p>Loading...</p>
+          </div>
+        )}
 
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-10">
           {hotels.map((hotel, i) => (
