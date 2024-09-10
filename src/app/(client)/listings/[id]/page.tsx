@@ -253,7 +253,7 @@ const SingleHotel = ({
           location_rating: location,
           service_rating: service,
           price_rating: price,
-          user: session.data?.user?.id,
+          user: session.data?.user?.email,
           review: message,
         }
       );

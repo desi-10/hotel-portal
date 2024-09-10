@@ -168,6 +168,8 @@ const SingleEventCenter = ({
 
     console.log(eventCenters);
 
+    console.log(session?.data?.user?.email);
+
     try {
       const booking = await axios.post(
         "https://hotelbookingcenter.pythonanywhere.com/api/event-bookings/",
@@ -175,7 +177,7 @@ const SingleEventCenter = ({
           start_date: checkin,
           end_date: checkout,
           event_center: eventCenters?.id,
-          customer: session?.data?.user?.id,
+          customer: session?.data?.user?.email,
         }
       );
 
@@ -227,7 +229,7 @@ const SingleEventCenter = ({
           location_rating: location,
           service_rating: service,
           price_rating: price,
-          user: session?.data?.user?.id,
+          user: session?.data?.user?.email,
           review: message,
         }
       );

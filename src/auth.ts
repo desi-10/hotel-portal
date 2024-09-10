@@ -34,6 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             ...response.data,
             name: response.data?.phone_number,
             id: response.data?.user_id,
+            email: response.data?.profile_id,
           }; // Adjust based on the shape of your API response
 
           console.log(user);
