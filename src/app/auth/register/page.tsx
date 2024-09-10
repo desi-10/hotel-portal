@@ -40,7 +40,7 @@ const RegisterPage = () => {
         router.push("/auth/");
       } else {
         const { data } = await axios.post(
-          "https://hotelbookingcenter.pythonanywhere.com/api/token/register/",
+          "https://hotelbookingcenter.pythonanywhere.com/api/token/generate-otp/",
           {
             phone_number: phonenumber,
           }
