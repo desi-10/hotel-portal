@@ -1,4 +1,4 @@
-import { Check, Wifi } from "lucide-react";
+import { Calendar, Check, Wifi } from "lucide-react";
 import { AiOutlineExpandAlt } from "react-icons/ai";
 import { IoLocationOutline, IoMailOutline } from "react-icons/io5";
 import { RiHome5Line } from "react-icons/ri";
@@ -85,8 +85,16 @@ const HotelCard = ({ hotel }: { hotel: HotelType | any }) => {
           </main>
           <footer className="flex items-center justify-between divide-x">
             <div className="flex items-center space-x-3 p-3">
-              <p className="bg-blue-200 rounded-full p-2 text-white">
-                <RiHome5Line className="w-5 h-5" />
+              <p
+                className={`${
+                  hotel?.event_center_number ? "bg-red-200" : "bg-blue-200"
+                } rounded-full p-2 text-white`}
+              >
+                {hotel?.event_center_number ? (
+                  <Calendar className="w-5 h-5" />
+                ) : (
+                  <RiHome5Line className="w-5 h-5" />
+                )}
               </p>
               <p className="text-sm line-clamp-1">{hotel.name}</p>
             </div>
