@@ -45,7 +45,7 @@ const Navbar = () => {
       <div className="container flex justify-between items-center p-3">
         <div className="font-extrabold text-primaryColor">
           {/* <Image src="/logo.png" alt="logo" width={200} height={200} /> */}
-          Hotel and Event Center Portal
+          JCJ Lite
         </div>
 
         <div className="hidden lg:flex items-center space-x-5">
