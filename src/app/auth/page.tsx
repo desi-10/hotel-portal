@@ -64,7 +64,7 @@ const LoginPage = () => {
       <section className="bg-gray-100 flex-1 flex justify-center items-center p-4">
         <div className="w-full max-w-md mx-auto">
           <p className="text-center mb-2 text-sm md:text-base text-gray-700">
-            Hotel Portal
+            JCJ Lite
           </p>
           <h2 className="text-center text-xl md:text-2xl mb-5 text-blue-600 font-bold">
             Welcome to the Login System
